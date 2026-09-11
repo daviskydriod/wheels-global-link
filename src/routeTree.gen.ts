@@ -10,33 +10,78 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CarsRouteImport } from './routes/cars'
+import { Route as SparePartsRouteImport } from './routes/spare-parts'
+import { Route as CarsSlugRouteImport } from './routes/cars.$slug'
+import { Route as SparePartsSlugRouteImport } from './routes/spare-parts.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CarsRoute = CarsRouteImport.update({
+  id: '/cars',
+  path: '/cars',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SparePartsRoute = SparePartsRouteImport.update({
+  id: '/spare-parts',
+  path: '/spare-parts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CarsSlugRoute = CarsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => CarsRoute,
+} as any)
+const SparePartsSlugRoute = SparePartsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => SparePartsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cars': typeof CarsRouteWithChildren
+  '/spare-parts': typeof SparePartsRouteWithChildren
+  '/cars/$slug': typeof CarsSlugRoute
+  '/spare-parts/$slug': typeof SparePartsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cars': typeof CarsRouteWithChildren
+  '/spare-parts': typeof SparePartsRouteWithChildren
+  '/cars/$slug': typeof CarsSlugRoute
+  '/spare-parts/$slug': typeof SparePartsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cars': typeof CarsRouteWithChildren
+  '/spare-parts': typeof SparePartsRouteWithChildren
+  '/cars/$slug': typeof CarsSlugRoute
+  '/spare-parts/$slug': typeof SparePartsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/cars' | '/spare-parts' | '/cars/$slug' | '/spare-parts/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/cars' | '/spare-parts' | '/cars/$slug' | '/spare-parts/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/cars'
+    | '/spare-parts'
+    | '/cars/$slug'
+    | '/spare-parts/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CarsRoute: typeof CarsRouteWithChildren
+  SparePartsRoute: typeof SparePartsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +93,63 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cars': {
+      id: '/cars'
+      path: '/cars'
+      fullPath: '/cars'
+      preLoaderRoute: typeof CarsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/spare-parts': {
+      id: '/spare-parts'
+      path: '/spare-parts'
+      fullPath: '/spare-parts'
+      preLoaderRoute: typeof SparePartsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cars/$slug': {
+      id: '/cars/$slug'
+      path: '/$slug'
+      fullPath: '/cars/$slug'
+      preLoaderRoute: typeof CarsSlugRouteImport
+      parentRoute: typeof CarsRoute
+    }
+    '/spare-parts/$slug': {
+      id: '/spare-parts/$slug'
+      path: '/$slug'
+      fullPath: '/spare-parts/$slug'
+      preLoaderRoute: typeof SparePartsSlugRouteImport
+      parentRoute: typeof SparePartsRoute
+    }
   }
 }
 
+interface CarsRouteChildren {
+  CarsSlugRoute: typeof CarsSlugRoute
+}
+
+const CarsRouteChildren: CarsRouteChildren = {
+  CarsSlugRoute: CarsSlugRoute,
+}
+
+const CarsRouteWithChildren = CarsRoute._addFileChildren(CarsRouteChildren)
+
+interface SparePartsRouteChildren {
+  SparePartsSlugRoute: typeof SparePartsSlugRoute
+}
+
+const SparePartsRouteChildren: SparePartsRouteChildren = {
+  SparePartsSlugRoute: SparePartsSlugRoute,
+}
+
+const SparePartsRouteWithChildren = SparePartsRoute._addFileChildren(
+  SparePartsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CarsRoute: CarsRouteWithChildren,
+  SparePartsRoute: SparePartsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
