@@ -6,7 +6,7 @@ import rangeRover from "@/assets/car-range-rover.jpg";
 import hyundai from "@/assets/car-hyundai.jpg";
 import partsImage from "@/assets/awa-parts-category.jpg";
 
-export type Vehicle = { slug:string; brand:string; model:string; year:number; condition:string; fuel:string; transmission:string; price:string; mileage:string; engine:string; color:string; availability:string; image:string; description:string };
+export type Vehicle = { slug:string; brand:string; model:string; year:number; condition:string; fuel:string; transmission:string; price:string; mileage:string; engine:string; color:string; availability:string; image:string; description:string; has_360?:boolean; images?:string[] };
 export const vehicles: Vehicle[] = [
  {slug:"toyota-land-cruiser",brand:"Toyota",model:"Land Cruiser",year:2024,condition:"New",fuel:"Petrol",transmission:"Automatic",price:"Contact for Price",mileage:"Delivery mileage",engine:"3.5L V6",color:"Pearl White",availability:"Available to source",image:landCruiser,description:"A capable full-size SUV configured for premium comfort, long-distance travel and demanding road conditions."},
  {slug:"lexus-rx-350",brand:"Lexus",model:"RX 350",year:2023,condition:"New",fuel:"Petrol",transmission:"Automatic",price:"Contact for Price",mileage:"Delivery mileage",engine:"2.4L Turbo",color:"White",availability:"Available to source",image:lexus,description:"A refined luxury crossover combining a quiet cabin, modern technology and everyday versatility."},

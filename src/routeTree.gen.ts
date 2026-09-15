@@ -10,9 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as CarsRouteImport } from './routes/cars'
+import { Route as CompareRouteImport } from './routes/compare'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ShippingRouteImport } from './routes/shipping'
 import { Route as SparePartsRouteImport } from './routes/spare-parts'
+import { Route as TrackOrderRouteImport } from './routes/track-order'
+import { Route as WhyAwaRouteImport } from './routes/why-awa'
 import { Route as CarsSlugRouteImport } from './routes/cars.$slug'
+import { Route as NewsIndexRouteImport } from './routes/news/index'
+import { Route as NewsSlugRouteImport } from './routes/news/$slug'
 import { Route as SparePartsSlugRouteImport } from './routes/spare-parts.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -20,9 +28,29 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CarsRoute = CarsRouteImport.update({
   id: '/cars',
   path: '/cars',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShippingRoute = ShippingRouteImport.update({
+  id: '/shipping',
+  path: '/shipping',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SparePartsRoute = SparePartsRouteImport.update({
@@ -30,10 +58,30 @@ const SparePartsRoute = SparePartsRouteImport.update({
   path: '/spare-parts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TrackOrderRoute = TrackOrderRouteImport.update({
+  id: '/track-order',
+  path: '/track-order',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WhyAwaRoute = WhyAwaRouteImport.update({
+  id: '/why-awa',
+  path: '/why-awa',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CarsSlugRoute = CarsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => CarsRoute,
+} as any)
+const NewsIndexRoute = NewsIndexRouteImport.update({
+  id: '/news/',
+  path: '/news/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsSlugRoute = NewsSlugRouteImport.update({
+  id: '/news/$slug',
+  path: '/news/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const SparePartsSlugRoute = SparePartsSlugRouteImport.update({
   id: '/$slug',
@@ -43,45 +91,110 @@ const SparePartsSlugRoute = SparePartsSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/cars': typeof CarsRouteWithChildren
+  '/compare': typeof CompareRoute
+  '/contact': typeof ContactRoute
+  '/shipping': typeof ShippingRoute
   '/spare-parts': typeof SparePartsRouteWithChildren
+  '/track-order': typeof TrackOrderRoute
+  '/why-awa': typeof WhyAwaRoute
   '/cars/$slug': typeof CarsSlugRoute
+  '/news/$slug': typeof NewsSlugRoute
   '/spare-parts/$slug': typeof SparePartsSlugRoute
+  '/news/': typeof NewsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/cars': typeof CarsRouteWithChildren
+  '/compare': typeof CompareRoute
+  '/contact': typeof ContactRoute
+  '/shipping': typeof ShippingRoute
   '/spare-parts': typeof SparePartsRouteWithChildren
+  '/track-order': typeof TrackOrderRoute
+  '/why-awa': typeof WhyAwaRoute
   '/cars/$slug': typeof CarsSlugRoute
+  '/news/$slug': typeof NewsSlugRoute
   '/spare-parts/$slug': typeof SparePartsSlugRoute
+  '/news': typeof NewsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/cars': typeof CarsRouteWithChildren
+  '/compare': typeof CompareRoute
+  '/contact': typeof ContactRoute
+  '/shipping': typeof ShippingRoute
   '/spare-parts': typeof SparePartsRouteWithChildren
+  '/track-order': typeof TrackOrderRoute
+  '/why-awa': typeof WhyAwaRoute
   '/cars/$slug': typeof CarsSlugRoute
+  '/news/$slug': typeof NewsSlugRoute
   '/spare-parts/$slug': typeof SparePartsSlugRoute
+  '/news/': typeof NewsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/cars' | '/spare-parts' | '/cars/$slug' | '/spare-parts/$slug'
+    | '/'
+    | '/about'
+    | '/cars'
+    | '/compare'
+    | '/contact'
+    | '/shipping'
+    | '/spare-parts'
+    | '/track-order'
+    | '/why-awa'
+    | '/cars/$slug'
+    | '/news/$slug'
+    | '/spare-parts/$slug'
+    | '/news/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cars' | '/spare-parts' | '/cars/$slug' | '/spare-parts/$slug'
+  to:
+    | '/'
+    | '/about'
+    | '/cars'
+    | '/compare'
+    | '/contact'
+    | '/shipping'
+    | '/spare-parts'
+    | '/track-order'
+    | '/why-awa'
+    | '/cars/$slug'
+    | '/news/$slug'
+    | '/spare-parts/$slug'
+    | '/news'
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/cars'
+    | '/compare'
+    | '/contact'
+    | '/shipping'
     | '/spare-parts'
+    | '/track-order'
+    | '/why-awa'
     | '/cars/$slug'
+    | '/news/$slug'
     | '/spare-parts/$slug'
+    | '/news/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   CarsRoute: typeof CarsRouteWithChildren
+  CompareRoute: typeof CompareRoute
+  ContactRoute: typeof ContactRoute
+  ShippingRoute: typeof ShippingRoute
   SparePartsRoute: typeof SparePartsRouteWithChildren
+  TrackOrderRoute: typeof TrackOrderRoute
+  WhyAwaRoute: typeof WhyAwaRoute
+  NewsSlugRoute: typeof NewsSlugRoute
+  NewsIndexRoute: typeof NewsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -93,11 +206,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cars': {
       id: '/cars'
       path: '/cars'
       fullPath: '/cars'
       preLoaderRoute: typeof CarsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shipping': {
+      id: '/shipping'
+      path: '/shipping'
+      fullPath: '/shipping'
+      preLoaderRoute: typeof ShippingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/spare-parts': {
@@ -107,12 +248,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SparePartsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/track-order': {
+      id: '/track-order'
+      path: '/track-order'
+      fullPath: '/track-order'
+      preLoaderRoute: typeof TrackOrderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/why-awa': {
+      id: '/why-awa'
+      path: '/why-awa'
+      fullPath: '/why-awa'
+      preLoaderRoute: typeof WhyAwaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cars/$slug': {
       id: '/cars/$slug'
       path: '/$slug'
       fullPath: '/cars/$slug'
       preLoaderRoute: typeof CarsSlugRouteImport
       parentRoute: typeof CarsRoute
+    }
+    '/news/': {
+      id: '/news/'
+      path: '/news'
+      fullPath: '/news/'
+      preLoaderRoute: typeof NewsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news/$slug': {
+      id: '/news/$slug'
+      path: '/news/$slug'
+      fullPath: '/news/$slug'
+      preLoaderRoute: typeof NewsSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/spare-parts/$slug': {
       id: '/spare-parts/$slug'
@@ -148,8 +317,16 @@ const SparePartsRouteWithChildren = SparePartsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   CarsRoute: CarsRouteWithChildren,
+  CompareRoute: CompareRoute,
+  ContactRoute: ContactRoute,
+  ShippingRoute: ShippingRoute,
   SparePartsRoute: SparePartsRouteWithChildren,
+  TrackOrderRoute: TrackOrderRoute,
+  WhyAwaRoute: WhyAwaRoute,
+  NewsSlugRoute: NewsSlugRoute,
+  NewsIndexRoute: NewsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

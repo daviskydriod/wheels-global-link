@@ -11,6 +11,8 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { CompareProvider, CompareTray } from "../components/marketplace";
+import { AIChatWidget } from "../components/ai-chat-widget";
 import { SiteFooter, SiteHeader, WhatsAppFloat } from "../components/site-shell";
 
 function NotFoundComponent() {
@@ -118,10 +120,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SiteHeader />
-      <main><Outlet /></main>
-      <SiteFooter />
-      <WhatsAppFloat />
+      <CompareProvider>
+        <SiteHeader />
+        <main><Outlet /></main>
+        <SiteFooter />
+        <WhatsAppFloat />
+        <CompareTray />
+        <AIChatWidget />
+      </CompareProvider>
     </QueryClientProvider>
   );
 }
