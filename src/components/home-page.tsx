@@ -35,20 +35,7 @@ export function HomePage() {
     <>
       <Hero />
       <SearchSection />
-      <motion.section {...reveal} className="section-pad bg-background">
-        <div className="container-shell">
-          <SectionHeading eyebrow="Browse by category" title="What Are You Looking For?" />
-          <div className="grid gap-5 lg:grid-cols-2">
-            <Category
-              image={carsCategory}
-              title="Cars"
-              copy="Explore quality vehicles for personal, business and commercial needs."
-              to="/cars"
-              label="Explore Cars"
-            />
-          </div>
-        </div>
-      </motion.section>
+      <BrowseByCategory />
       <motion.section {...reveal} className="section-pad bg-secondary">
         <div className="container-shell">
           <SectionHeading
@@ -116,41 +103,81 @@ function Hero() {
 
 function SearchSection(){const [query,setQuery]=useState("");const shown=vehicles.filter(vehicle=>`${vehicle.brand} ${vehicle.model}`.toLowerCase().includes(query.toLowerCase()));return <section className="section-pad bg-secondary"><div className="container-shell"><SectionHeading eyebrow="Live vehicle search" title="Start With A Make Or Model" copy="Search the current representative inventory without leaving this page."/><div className="relative max-w-2xl"><Search className="absolute left-4 top-3 h-5 w-5 text-primary"/><Input value={query} onChange={event=>setQuery(event.target.value)} placeholder="Try Toyota, Lexus, SUV..." className="h-12 pl-12"/></div>{query&&<div className="mt-6"><p className="mb-4 text-sm font-bold uppercase text-muted-foreground">{shown.length} matching vehicle{shown.length===1?"":"s"}</p>{shown.length?<VehicleGrid items={shown}/>:<p className="border border-border bg-background p-6 text-muted-foreground">No matching vehicle in the current gallery. We can source it for you.</p>}</div>}</div></section>}
 
-function Category({
-  image,
-  title,
-  copy,
-  to,
-  label,
-}: {
-  image: string;
-  title: string;
-  copy: string;
-  to: "/cars";
-  label: string;
-}) {
+const categoryTiles = [
+  {
+    image: carsCategory,
+    title: "By Brand",
+    copy: "Toyota, Lexus, Mercedes-Benz, BMW, Range Rover, Hyundai and more.",
+    chips: ["Toyota", "Lexus", "Mercedes-Benz"],
+    search: (value: string) => ({ q: "", brand: value, carType: "All", condition: "All" }),
+    seeAll: { q: "", brand: "All", carType: "All", condition: "All" },
+  },
+  {
+    image: showroom,
+    title: "By Model",
+    copy: "Land Cruiser, RX 350, E-Class, 5 Series, Sport and Santa Fe.",
+    chips: ["Land Cruiser", "RX 350", "Santa Fe"],
+    search: (value: string) => ({ q: value, brand: "All", carType: "All", condition: "All" }),
+    seeAll: { q: "", brand: "All", carType: "All", condition: "All" },
+  },
+  {
+    image: globalImage,
+    title: "By Car Type",
+    copy: "SUVs, sedans and trucks matched to how you'll actually use the vehicle.",
+    chips: ["SUV", "Sedan", "Truck"],
+    search: (value: string) => ({ q: "", brand: "All", carType: value, condition: "All" }),
+    seeAll: { q: "", brand: "All", carType: "All", condition: "All" },
+  },
+] as const;
+
+function BrowseByCategory() {
   return (
-    <article className="group relative min-h-[430px] overflow-hidden bg-navy">
-      <img
-        src={image}
-        alt={`${title} available through AWA AUTO MALL`}
-        width={1600}
-        height={1000}
-        loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-surface-dark/15 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 p-7 text-primary-foreground sm:p-9">
-        <h3 className="text-4xl font-extrabold uppercase">{title}</h3>
-        <p className="mt-2 max-w-md text-sm leading-6 text-primary-foreground/70">{copy}</p>
-        <Button asChild variant="inverse" className="mt-6">
-          <Link to={to}>
-            {label}
-            <ArrowRight />
-          </Link>
-        </Button>
+    <motion.section {...reveal} className="section-pad bg-background">
+      <div className="container-shell">
+        <SectionHeading
+          eyebrow="Browse by category"
+          title="What Are You Looking For?"
+          copy="Start your search the way that makes sense to you — by brand, by model, or by the type of vehicle you need."
+        />
+        <div className="grid gap-5 lg:grid-cols-3">
+          {categoryTiles.map((tile) => (
+            <article key={tile.title} className="group relative min-h-[430px] overflow-hidden bg-navy">
+              <img
+                src={tile.image}
+                alt={`${tile.title} available through AWA AUTO MALL`}
+                width={1600}
+                height={1000}
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-surface-dark/20 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-7 text-primary-foreground sm:p-9">
+                <h3 className="text-3xl font-extrabold uppercase">{tile.title}</h3>
+                <p className="mt-2 max-w-md text-sm leading-6 text-primary-foreground/70">{tile.copy}</p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {tile.chips.map((chip) => (
+                    <Link
+                      key={chip}
+                      to="/cars"
+                      search={tile.search(chip)}
+                      className="border border-primary-foreground/40 px-3 py-1.5 text-xs font-bold uppercase transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                    >
+                      {chip}
+                    </Link>
+                  ))}
+                </div>
+                <Button asChild variant="inverse" className="mt-6">
+                  <Link to="/cars" search={tile.seeAll}>
+                    See All {tile.title.replace("By ", "")}s
+                    <ArrowRight />
+                  </Link>
+                </Button>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
-    </article>
+    </motion.section>
   );
 }
 
