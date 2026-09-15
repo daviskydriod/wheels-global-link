@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/awa-logo.png";
 
-const nav = [{to:"/",label:"Home"},{to:"/cars",label:"Cars"},{to:"/about",label:"About Us"},{to:"/why-awa",label:"Why AWA"},{to:"/contact",label:"Contact"}] as const;
+const nav = [{to:"/",label:"Home"},{to:"/cars",label:"Cars"},{to:"/news",label:"News"},{to:"/about",label:"About Us"},{to:"/why-awa",label:"Why AWA"},{to:"/contact",label:"Contact"}] as const;
 export const whatsappUrl = (message = "Hello AWA AUTO MALL, I would like to make an inquiry.") => `https://wa.me/971586106612?text=${encodeURIComponent(message)}`;
 
 export function SiteHeader(){
