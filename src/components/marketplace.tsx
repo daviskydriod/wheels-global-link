@@ -80,6 +80,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
       <Link
         to="/cars/$slug"
         params={{ slug: vehicle.slug }}
+        preload="intent"
         className="block overflow-hidden bg-muted"
       >
         <img
@@ -120,7 +121,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         <strong>{vehicle.price}</strong>
         <div className="mt-5 grid gap-2 sm:grid-cols-2">
           <Button asChild variant="outline">
-            <Link to="/cars/$slug" params={{ slug: vehicle.slug }}>
+            <Link to="/cars/$slug" params={{ slug: vehicle.slug }} preload="intent">
               Details
             </Link>
           </Button>

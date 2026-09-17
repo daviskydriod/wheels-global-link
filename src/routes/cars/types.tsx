@@ -66,6 +66,7 @@ function VehicleTypesPage() {
                 key={item.type}
                 to="/cars/types/$type"
                 params={{ type: item.type.toLowerCase() }}
+                preload="intent"
                 className="group relative min-h-[420px] overflow-hidden bg-navy"
               >
                 <img

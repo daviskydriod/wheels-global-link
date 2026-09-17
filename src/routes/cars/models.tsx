@@ -55,6 +55,7 @@ function VehicleModelsPage() {
                 key={vehicle.model}
                 to="/cars/models/$model"
                 params={{ model: slugify(vehicle.model) }}
+                preload="intent"
                 className="group border-b border-r border-border bg-background p-5 transition-colors hover:bg-primary hover:text-primary-foreground"
               >
                 <div className="overflow-hidden bg-muted">
