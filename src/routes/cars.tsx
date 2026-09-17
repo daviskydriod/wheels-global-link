@@ -1,11 +1,18 @@
 import { createFileRoute, Outlet, useRouterState } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { PageIntro, SectionHeading, VehicleGrid } from "@/components/marketplace";
 import { Input } from "@/components/ui/input";
 import { vehicles } from "@/lib/inventory";
 import hero from "@/assets/awa-cars-category.jpg";
 
 export const Route = createFileRoute("/cars")({
+  validateSearch: (search) => ({
+    q: typeof search.q === "string" ? search.q : "",
+    brand: typeof search.brand === "string" ? search.brand : "All",
+    model: typeof search.model === "string" ? search.model : "All",
+    carType: typeof search.carType === "string" ? search.carType : "All",
+    condition: typeof search.condition === "string" ? search.condition : "All",
+  }),
   head: () => ({
     meta: [
       { title: "Cars for Sale & Sourcing | AWA AUTO MALL" },
@@ -27,9 +34,8 @@ export const Route = createFileRoute("/cars")({
   component: CarsPage,
 });
 function CarsPage() {
-  const [query, setQuery] = useState("");
-  const [condition, setCondition] = useState("All");
-  const [carType, setCarType] = useState("All");
+  const navigate = Route.useNavigate();
+  const { q, brand, model, carType, condition } = Route.useSearch();
   const isDetail = useRouterState({
     select: (state) => state.location.pathname.startsWith("/cars/"),
   });
@@ -37,12 +43,18 @@ function CarsPage() {
     () =>
       vehicles.filter(
         (v) =>
-          `${v.brand} ${v.model}`.toLowerCase().includes(query.toLowerCase()) &&
+          `${v.brand} ${v.model} ${v.category ?? ""}`.toLowerCase().includes(q.toLowerCase()) &&
+          (brand === "All" || v.brand === brand) &&
+          (model === "All" || v.model === model) &&
           (condition === "All" || v.condition === condition) &&
           (carType === "All" || v.category === carType || getCarType(v.model) === carType),
       ),
-    [query, condition, carType],
+    [q, brand, model, condition, carType],
   );
+  const brands = [...new Set(vehicles.map((vehicle) => vehicle.brand))].sort();
+  const models = [...new Set(vehicles.map((vehicle) => vehicle.model))].sort();
+  const updateSearch = (key: "q" | "brand" | "model" | "carType" | "condition", value: string) =>
+    navigate({ search: (previous) => ({ ...previous, [key]: value }) });
   if (isDetail) return <Outlet />;
   return (
     <>
@@ -57,22 +69,48 @@ function CarsPage() {
           <SectionHeading
             eyebrow="Browse by category"
             title="Find The Right Vehicle"
-            copy="Browse by brand, model, car type, or condition to narrow your search."
+            copy="Filter the inventory by brand, model, vehicle type, or condition."
           />
-          <div className="mb-10 grid gap-3 border border-border bg-secondary p-4 md:grid-cols-3">
+          <div className="mb-10 grid gap-3 border border-border bg-secondary p-4 md:grid-cols-2 lg:grid-cols-5">
             <label>
               <span className="sr-only">Search brand or model</span>
               <Input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Brand or model"
+                value={q}
+                onChange={(e) => updateSearch("q", e.target.value)}
+                placeholder="Search inventory"
               />
+            </label>
+            <label>
+              <span className="sr-only">Filter by brand</span>
+              <select
+                value={brand}
+                onChange={(e) => updateSearch("brand", e.target.value)}
+                className="h-9 w-full border border-input bg-background px-3 text-sm"
+              >
+                <option value="All">All brands</option>
+                {brands.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              <span className="sr-only">Filter by model</span>
+              <select
+                value={model}
+                onChange={(e) => updateSearch("model", e.target.value)}
+                className="h-9 w-full border border-input bg-background px-3 text-sm"
+              >
+                <option value="All">All models</option>
+                {models.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </select>
             </label>
             <label>
               <span className="sr-only">Filter by car type</span>
               <select
                 value={carType}
-                onChange={(e) => setCarType(e.target.value)}
+                onChange={(e) => updateSearch("carType", e.target.value)}
                 className="h-9 w-full border border-input bg-background px-3 text-sm"
               >
                 <option value="All">All car types</option>
@@ -85,7 +123,7 @@ function CarsPage() {
               <span className="sr-only">Filter by condition</span>
               <select
                 value={condition}
-                onChange={(e) => setCondition(e.target.value)}
+                onChange={(e) => updateSearch("condition", e.target.value)}
                 className="h-9 w-full border border-input bg-background px-3 text-sm"
               >
                 <option>All</option>

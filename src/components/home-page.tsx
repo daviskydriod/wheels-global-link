@@ -41,7 +41,7 @@ export function HomePage() {
           <SectionHeading
             eyebrow="Vehicle inventory"
             title="Featured Vehicles"
-            copy="Explore some of the vehicles available through AWA AUTO MALL. Inventory shown is representative and subject to confirmation."
+            copy="Explore vehicles by brand, model, or type. Inventory shown is representative and subject to confirmation."
           />
           <VehicleGrid items={vehicles} />
           <div className="mt-10 text-center">
@@ -101,7 +101,49 @@ function Hero() {
   return <section className="relative min-h-[calc(100svh-5rem)] overflow-hidden bg-navy text-primary-foreground"><img src={hero} alt="Premium SUV in a modern city showroom" width={1920} height={1080} fetchPriority="high" className="absolute inset-0 h-full w-full object-cover object-[62%_center]"/><div className="absolute inset-0 bg-gradient-to-r from-surface-dark via-surface-dark/70 to-transparent"/><div className="container-shell relative flex min-h-[calc(100svh-5rem)] items-center py-16"><div className="max-w-3xl"><motion.p initial={{opacity:0}} animate={{opacity:1}} className="mb-5 flex items-center gap-3 text-sm font-bold uppercase"><span className="h-0.5 w-10 bg-destructive"/>Guangzhou · Global Automotive Sourcing</motion.p><motion.h1 initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{duration:.6}} className="text-5xl font-extrabold uppercase leading-[.9] sm:text-7xl lg:text-8xl">Your Trusted Source for <span className="text-primary">Cars</span></motion.h1><p className="mt-6 max-w-xl text-base leading-7 text-primary-foreground/75 sm:text-lg">Quality vehicles, sourced in China and supplied globally.</p><div className="mt-8 flex flex-wrap gap-3"><Button asChild size="lg"><Link to="/cars">Browse Cars<ArrowRight/></Link></Button></div></div></div></section>;
 }
 
-function SearchSection(){const [query,setQuery]=useState("");const shown=vehicles.filter(vehicle=>`${vehicle.brand} ${vehicle.model}`.toLowerCase().includes(query.toLowerCase()));return <section className="section-pad bg-secondary"><div className="container-shell"><SectionHeading eyebrow="Live vehicle search" title="Start With A Make Or Model" copy="Search the current representative inventory without leaving this page."/><div className="relative max-w-2xl"><Search className="absolute left-4 top-3 h-5 w-5 text-primary"/><Input value={query} onChange={event=>setQuery(event.target.value)} placeholder="Try Toyota, Lexus, SUV..." className="h-12 pl-12"/></div>{query&&<div className="mt-6"><p className="mb-4 text-sm font-bold uppercase text-muted-foreground">{shown.length} matching vehicle{shown.length===1?"":"s"}</p>{shown.length?<VehicleGrid items={shown}/>:<p className="border border-border bg-background p-6 text-muted-foreground">No matching vehicle in the current gallery. We can source it for you.</p>}</div>}</div></section>}
+function SearchSection() {
+  const [query, setQuery] = useState("");
+  const shown = vehicles.filter((vehicle) =>
+    `${vehicle.brand} ${vehicle.model} ${vehicle.category ?? ""}`
+      .toLowerCase()
+      .includes(query.toLowerCase()),
+  );
+
+  return (
+    <section className="section-pad bg-secondary">
+      <div className="container-shell">
+        <SectionHeading
+          eyebrow="Live vehicle search"
+          title="Search By Brand, Model Or Type"
+          copy="Search the current representative inventory without leaving this page."
+        />
+        <div className="relative max-w-2xl">
+          <Search className="absolute left-4 top-3 h-5 w-5 text-primary" />
+          <Input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Try Toyota, Lexus, SUV or Truck..."
+            className="h-12 pl-12"
+          />
+        </div>
+        {query && (
+          <div className="mt-6">
+            <p className="mb-4 text-sm font-bold uppercase text-muted-foreground">
+              {shown.length} matching vehicle{shown.length === 1 ? "" : "s"}
+            </p>
+            {shown.length ? (
+              <VehicleGrid items={shown} />
+            ) : (
+              <p className="border border-border bg-background p-6 text-muted-foreground">
+                No matching vehicle in the current gallery. We can source it for you.
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
 
 const categoryTiles = [
   {

@@ -158,21 +158,11 @@ function toVehicle(row: AlibabaRow, index: number, category: "SUV" | "Sedan" | "
       /\b(black|white|silver|grey|gray|blue|red|green|gold|yellow)\b/i,
       "As shown",
     ),
-    availability: "Imported development listing",
+    availability: "Available for inquiry",
     image,
     images: [image],
-    description: `${category} development listing sourced from an Alibaba export. Confirm final specification, condition, price, shipping, and availability with AWA AUTO MALL before purchase.`,
+    description: `${category} vehicle available through AWA AUTO MALL. Confirm final specification, condition, price, shipping, and availability with our team before purchase.`,
     category,
-    source: "Alibaba development import",
-    supplier: row.supplier,
-    productUrl: row.productUrl,
-    moq: row.moq,
-    rating: row.rating,
-    reviews: row.reviews,
-    sold: row.sold,
-    supplierYears: row.supplierYears,
-    supplierCountry: row.supplierCountry,
-    isVerified: row.isVerified === "true",
   };
 }
 

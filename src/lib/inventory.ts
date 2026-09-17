@@ -26,15 +26,6 @@ export type Vehicle = {
   images?: string[];
   category?: string;
   source?: string;
-  supplier?: string;
-  productUrl?: string;
-  moq?: string;
-  rating?: string;
-  reviews?: string;
-  sold?: string;
-  supplierYears?: string;
-  supplierCountry?: string;
-  isVerified?: boolean;
 };
 const localVehicles: Vehicle[] = [
   {

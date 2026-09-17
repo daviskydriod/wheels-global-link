@@ -2,14 +2,9 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import {
   ArrowLeft,
   CheckCircle2,
-  ExternalLink,
   Factory,
   Fuel,
-  Gauge,
-  MapPin,
   MessageCircle,
-  PackageCheck,
-  Settings2,
   ShieldCheck,
   Ship,
 } from "lucide-react";
@@ -140,19 +135,9 @@ function VehicleDetail() {
                 </a>
               </Button>
             </div>
-            {vehicle.productUrl && (
-              <a
-                href={vehicle.productUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-primary"
-              >
-                View original supplier listing <ExternalLink className="h-4 w-4" />
-              </a>
-            )}
             <p className="mt-6 text-xs leading-5 text-muted-foreground">
-              Development listing. Availability, specification, supplier terms, shipping cost, and
-              final price must be confirmed with AWA AUTO MALL.
+              Availability, specification, shipping cost, and final price must be confirmed with AWA
+              AUTO MALL.
             </p>
           </div>
         </div>
@@ -168,58 +153,6 @@ function VehicleDetail() {
               </div>
             ))}
           </dl>
-        </div>
-      </section>
-      <section className="section-pad bg-background">
-        <div className="container-shell grid gap-10 lg:grid-cols-[.85fr_1.15fr]">
-          <div>
-            <SectionTitle
-              eyebrow="Source details"
-              title="Know What You Are Reviewing"
-              copy="This listing is part of the development inventory imported from an Alibaba supplier export. It is a starting point for sourcing, not a final sales offer."
-            />
-            <div className="flex items-start gap-3 border-l-2 border-primary pl-5 text-sm leading-6 text-muted-foreground">
-              <ShieldCheck className="mt-1 shrink-0 text-primary" />
-              Confirm specification, condition, availability, price, documentation, and delivery
-              before payment.
-            </div>
-          </div>
-          <div className="grid border-l border-t border-border sm:grid-cols-2">
-            <Info
-              icon={Factory}
-              label="Supplier"
-              value={vehicle.supplier ?? "AWA sourcing network"}
-            />
-            <Info
-              icon={MapPin}
-              label="Supplier country"
-              value={vehicle.supplierCountry ?? "China"}
-            />
-            <Info
-              icon={PackageCheck}
-              label="Minimum order"
-              value={vehicle.moq ?? "Confirm during inquiry"}
-            />
-            <Info
-              icon={ShieldCheck}
-              label="Verification"
-              value={vehicle.isVerified ? "Supplier verified" : "Confirm supplier details"}
-            />
-            <Info
-              icon={Gauge}
-              label="Supplier rating"
-              value={
-                vehicle.rating && vehicle.rating !== "N/A"
-                  ? `${vehicle.rating} / 5`
-                  : "Not supplied"
-              }
-            />
-            <Info
-              icon={Settings2}
-              label="Supplier experience"
-              value={vehicle.supplierYears ?? "Not supplied"}
-            />
-          </div>
         </div>
       </section>
       <section className="section-pad bg-navy text-primary-foreground">
