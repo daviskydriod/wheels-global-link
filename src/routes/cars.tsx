@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useMemo } from "react";
-import { ArrowRight, Search, SlidersHorizontal } from "lucide-react";
+import { ArrowLeft, ArrowRight, Search, SlidersHorizontal } from "lucide-react";
 import { PageIntro, SectionHeading, VehicleGrid } from "@/components/marketplace";
 import { Input } from "@/components/ui/input";
 import { vehicles } from "@/lib/inventory";
@@ -15,6 +15,7 @@ export const Route = createFileRoute("/cars")({
     model: typeof search.model === "string" ? search.model : "All",
     carType: typeof search.carType === "string" ? search.carType : "All",
     condition: typeof search.condition === "string" ? search.condition : "All",
+    page: typeof search.page === "number" ? search.page : 1,
   }),
   head: () => ({
     meta: [
@@ -38,7 +39,7 @@ export const Route = createFileRoute("/cars")({
 });
 function CarsPage() {
   const navigate = Route.useNavigate();
-  const { q, brand, model, carType, condition } = Route.useSearch();
+  const { q, brand, model, carType, condition, page } = Route.useSearch();
   const isDetail = useRouterState({
     select: (state) => state.location.pathname.startsWith("/cars/"),
   });
@@ -57,11 +58,15 @@ function CarsPage() {
   const brands = [...new Set(vehicles.map((vehicle) => vehicle.brand))].sort();
   const models = [...new Set(vehicles.map((vehicle) => vehicle.model))].sort();
   const updateSearch = (key: "q" | "brand" | "model" | "carType" | "condition", value: string) =>
-    navigate({ search: (previous) => ({ ...previous, [key]: value }) });
+    navigate({ search: (previous) => ({ ...previous, [key]: value, page: 1 }) });
   const featured = vehicles.slice(0, 6);
   const hasFilters = Boolean(
     q || brand !== "All" || model !== "All" || carType !== "All" || condition !== "All",
   );
+  const pageSize = 12;
+  const pageCount = Math.max(1, Math.ceil(shown.length / pageSize));
+  const currentPage = Math.min(Math.max(page, 1), pageCount);
+  const visibleVehicles = shown.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   if (isDetail) return <Outlet />;
   return (
     <>
@@ -205,7 +210,36 @@ function CarsPage() {
             <h2 className="mb-6 text-3xl font-extrabold uppercase">
               {hasFilters ? "Matching Vehicles" : "Explore All Vehicles"}
             </h2>
-            <VehicleGrid items={shown} />
+            <VehicleGrid items={visibleVehicles} />
+            {pageCount > 1 && (
+              <div className="mt-10 flex items-center justify-center gap-4 border-t border-border pt-6">
+                <button
+                  type="button"
+                  disabled={currentPage === 1}
+                  onClick={() =>
+                    navigate({ search: (previous) => ({ ...previous, page: currentPage - 1 }) })
+                  }
+                  className="inline-flex items-center gap-2 text-sm font-bold uppercase text-primary disabled:pointer-events-none disabled:opacity-35"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Previous
+                </button>
+                <span className="text-xs font-bold uppercase text-muted-foreground">
+                  Page {currentPage} of {pageCount}
+                </span>
+                <button
+                  type="button"
+                  disabled={currentPage === pageCount}
+                  onClick={() =>
+                    navigate({ search: (previous) => ({ ...previous, page: currentPage + 1 }) })
+                  }
+                  className="inline-flex items-center gap-2 text-sm font-bold uppercase text-primary disabled:pointer-events-none disabled:opacity-35"
+                >
+                  Next
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+            )}
           </div>
           {shown.length === 0 && (
             <p className="py-16 text-center text-muted-foreground">

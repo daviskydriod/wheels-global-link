@@ -127,7 +127,7 @@ function firstMatch(value: string, expression: RegExp, fallback: string) {
 function toVehicle(row: AlibabaRow, index: number, category: "SUV" | "Sedan" | "Truck"): Vehicle {
   const title = row.title.replace(/\s+/g, " ").trim();
   const year = Number(title.match(/\b(20\d{2})\b/)?.[1] ?? 2024);
-  const slug = `alibaba-${category.toLowerCase()}-${slugify(title)}-${index}`;
+  const slug = `awa-${category.toLowerCase()}-${slugify(title)}-${index}`;
   const fuel = /electric|\bev\b|new energy/i.test(title)
     ? "Electric"
     : /hybrid/i.test(title)
@@ -143,7 +143,7 @@ function toVehicle(row: AlibabaRow, index: number, category: "SUV" | "Sedan" | "
     brand: firstMatch(
       title,
       /\b(Toyota|Lexus|Mercedes(?:-Benz)?|BMW|BYD|MG|AION|Dongfeng|Hyundai|Kia|Honda|Nissan|Ford|Volkswagen|Audi|Tesla|Range Rover|Land Rover|Geely|Changan|Chery|Jetour|GAC|Forthing)\b/i,
-      "Alibaba selection",
+      "AWA selection",
     ),
     model: title.slice(0, 52),
     year,
@@ -168,7 +168,24 @@ function toVehicle(row: AlibabaRow, index: number, category: "SUV" | "Sedan" | "
 
 const importedRows = csvFiles
   .flatMap(parseCsv)
-  .filter((row) => vehicleWords.test(row.title) && !nonVehicleWords.test(row.title));
+  .filter((row) => vehicleWords.test(row.title) && !nonVehicleWords.test(row.title))
+  .filter((row, index, rows) => {
+    const productLink = row.productUrl.trim().toLowerCase();
+    const imageLink = row.imageUrl.trim().toLowerCase();
+    const title = row.title.replace(/\s+/g, " ").trim().toLowerCase();
+    return (
+      rows.findIndex((candidate) => {
+        const candidateProductLink = candidate.productUrl.trim().toLowerCase();
+        const candidateImageLink = candidate.imageUrl.trim().toLowerCase();
+        const candidateTitle = candidate.title.replace(/\s+/g, " ").trim().toLowerCase();
+        return (
+          (productLink && candidateProductLink === productLink) ||
+          (imageLink && candidateImageLink === imageLink) ||
+          (!productLink && !imageLink && title && candidateTitle === title)
+        );
+      }) === index
+    );
+  });
 const importedSuvs = importedRows
   .filter((row) => /\b(suv|4x4|sport utility|crossover)\b/i.test(row.title))
   .slice(0, 50);
