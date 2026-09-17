@@ -43,7 +43,7 @@ export function HomePage() {
             title="Featured Vehicles"
             copy="Explore vehicles by brand, model, or type. Inventory shown is representative and subject to confirmation."
           />
-          <VehicleGrid items={vehicles} />
+          <VehicleGrid items={vehicles.slice(0, 3)} />
           <div className="mt-10 text-center">
             <Button asChild size="lg">
               <Link to="/cars">
@@ -54,6 +54,7 @@ export function HomePage() {
           </div>
         </div>
       </motion.section>
+      <MarketplacePreview />
       <GlobalSection />
       <WhySection />
       <ProcessSection />
@@ -216,6 +217,65 @@ function BrowseByCategory() {
                 </Button>
               </div>
             </article>
+          ))}
+        </div>
+      </div>
+    </motion.section>
+  );
+}
+
+function MarketplacePreview() {
+  const models = [...new Set(vehicles.map((vehicle) => vehicle.model))].slice(0, 4);
+
+  return (
+    <motion.section {...reveal} className="section-pad bg-navy text-primary-foreground">
+      <div className="container-shell grid gap-12 lg:grid-cols-[.85fr_1.15fr] lg:items-center">
+        <div>
+          <p className="mb-4 flex items-center gap-3 text-xs font-bold uppercase text-primary-foreground/65">
+            <span className="h-0.5 w-10 bg-destructive" />
+            The AWA marketplace
+          </p>
+          <h2 className="text-4xl font-extrabold uppercase leading-none sm:text-6xl">
+            Make Your Search More Specific
+          </h2>
+          <p className="mt-5 max-w-xl leading-7 text-primary-foreground/70">
+            Start broad with a vehicle type, get specific with a model, then compare the options that fit your brief.
+          </p>
+          <div className="mt-8 grid grid-cols-3 border-l border-t border-primary-foreground/15">
+            <div className="border-b border-r border-primary-foreground/15 p-4">
+              <span className="block text-2xl font-extrabold text-primary">{vehicles.length}</span>
+              <span className="mt-1 block text-[10px] font-bold uppercase text-primary-foreground/60">Vehicles</span>
+            </div>
+            <div className="border-b border-r border-primary-foreground/15 p-4">
+              <span className="block text-2xl font-extrabold text-primary">3</span>
+              <span className="mt-1 block text-[10px] font-bold uppercase text-primary-foreground/60">Vehicle types</span>
+            </div>
+            <div className="border-b border-r border-primary-foreground/15 p-4">
+              <span className="block text-2xl font-extrabold text-primary">{new Set(vehicles.map((vehicle) => vehicle.brand)).size}</span>
+              <span className="mt-1 block text-[10px] font-bold uppercase text-primary-foreground/60">Brands</span>
+            </div>
+          </div>
+        </div>
+        <div className="grid border-l border-t border-primary-foreground/15 sm:grid-cols-2">
+          <Link to="/cars" search={{ q: "", brand: "All", model: "All", carType: "SUV", condition: "All" }} className="group border-b border-r border-primary-foreground/15 p-6 transition-colors hover:bg-primary hover:text-primary-foreground">
+            <span className="text-xs font-bold uppercase text-primary-foreground/55 group-hover:text-primary-foreground/70">01 / Vehicle type</span>
+            <h3 className="mt-8 text-2xl font-bold uppercase">Shop SUVs</h3>
+            <p className="mt-2 text-sm text-primary-foreground/65 group-hover:text-primary-foreground/80">Versatile vehicles for family and everyday use.</p>
+            <ArrowRight className="mt-6 h-5 w-5" />
+          </Link>
+          <Link to="/cars" search={{ q: "", brand: "All", model: "All", carType: "Truck", condition: "All" }} className="group border-b border-r border-primary-foreground/15 p-6 transition-colors hover:bg-primary hover:text-primary-foreground">
+            <span className="text-xs font-bold uppercase text-primary-foreground/55 group-hover:text-primary-foreground/70">02 / Vehicle type</span>
+            <h3 className="mt-8 text-2xl font-bold uppercase">Shop Trucks</h3>
+            <p className="mt-2 text-sm text-primary-foreground/65 group-hover:text-primary-foreground/80">Commercial options for work and logistics.</p>
+            <ArrowRight className="mt-6 h-5 w-5" />
+          </Link>
+          {models.slice(0, 2).map((model, index) => (
+            <Link key={model} to="/cars" search={{ q: "", brand: "All", model, carType: "All", condition: "All" }} className="group border-b border-r border-primary-foreground/15 p-6 transition-colors hover:bg-primary hover:text-primary-foreground">
+              <span className="text-xs font-bold uppercase text-primary-foreground/55 group-hover:text-primary-foreground/70">0{index + 3} / Popular model</span>
+              <h3 className="mt-8 text-2xl font-bold uppercase">{model}</h3>
+              <p className="mt-2 text-sm text-primary-foreground/65 group-hover:text-primary-foreground/80">See available listings and specifications.</p>
+              <ArrowRight className="mt-6 h-5 w-5" />
+            </Link>
           ))}
         </div>
       </div>

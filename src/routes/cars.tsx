@@ -1,9 +1,12 @@
-import { createFileRoute, Outlet, useRouterState } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useMemo } from "react";
+import { ArrowRight, CarFront, Layers3, Search, SlidersHorizontal, Sparkles } from "lucide-react";
 import { PageIntro, SectionHeading, VehicleGrid } from "@/components/marketplace";
 import { Input } from "@/components/ui/input";
 import { vehicles } from "@/lib/inventory";
 import hero from "@/assets/awa-cars-category.jpg";
+import globalImage from "@/assets/awa-global.jpg";
+import showroom from "@/assets/awa-showroom.jpg";
 
 export const Route = createFileRoute("/cars")({
   validateSearch: (search) => ({
@@ -55,84 +58,222 @@ function CarsPage() {
   const models = [...new Set(vehicles.map((vehicle) => vehicle.model))].sort();
   const updateSearch = (key: "q" | "brand" | "model" | "carType" | "condition", value: string) =>
     navigate({ search: (previous) => ({ ...previous, [key]: value }) });
+  const featured = vehicles.slice(0, 6);
+  const popularModels = [...new Set(vehicles.map((vehicle) => vehicle.model))].slice(0, 8);
+  const hasFilters = Boolean(
+    q || brand !== "All" || model !== "All" || carType !== "All" || condition !== "All",
+  );
   if (isDetail) return <Outlet />;
   return (
     <>
       <PageIntro
         eyebrow="Vehicle marketplace"
-        title="Cars Sourced Around Your Needs"
-        copy="Explore representative vehicles and tell us the exact make, model or specification you need."
+        title="Find Your Next Vehicle"
+        copy="Shop by vehicle type, browse popular models, or use the marketplace filters to narrow your shortlist."
         image={hero}
       />
-      <section className="section-pad">
+      <section className="border-b border-border bg-background">
+        <div className="container-shell grid divide-y border-x border-border sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          <MarketplaceStat
+            icon={CarFront}
+            value={vehicles.length}
+            label="Vehicles in the gallery"
+          />
+          <MarketplaceStat icon={Layers3} value={brands.length} label="Brands to explore" />
+          <MarketplaceStat icon={Sparkles} value={popularModels.length} label="Popular models" />
+        </div>
+      </section>
+      <section className="section-pad bg-secondary">
         <div className="container-shell">
           <SectionHeading
-            eyebrow="Browse by category"
-            title="Find The Right Vehicle"
-            copy="Filter the inventory by brand, model, vehicle type, or condition."
+            eyebrow="Shop the marketplace"
+            title="Start With A Vehicle Type"
+            copy="Choose the shape that fits your next journey, then refine the results by brand, model, and condition."
           />
-          <div className="mb-10 grid gap-3 border border-border bg-secondary p-4 md:grid-cols-2 lg:grid-cols-5">
-            <label>
-              <span className="sr-only">Search brand or model</span>
-              <Input
-                value={q}
-                onChange={(e) => updateSearch("q", e.target.value)}
-                placeholder="Search inventory"
-              />
-            </label>
-            <label>
-              <span className="sr-only">Filter by brand</span>
-              <select
-                value={brand}
-                onChange={(e) => updateSearch("brand", e.target.value)}
-                className="h-9 w-full border border-input bg-background px-3 text-sm"
-              >
-                <option value="All">All brands</option>
-                {brands.map((item) => (
-                  <option key={item}>{item}</option>
-                ))}
-              </select>
-            </label>
-            <label>
-              <span className="sr-only">Filter by model</span>
-              <select
-                value={model}
-                onChange={(e) => updateSearch("model", e.target.value)}
-                className="h-9 w-full border border-input bg-background px-3 text-sm"
-              >
-                <option value="All">All models</option>
-                {models.map((item) => (
-                  <option key={item}>{item}</option>
-                ))}
-              </select>
-            </label>
-            <label>
-              <span className="sr-only">Filter by car type</span>
-              <select
-                value={carType}
-                onChange={(e) => updateSearch("carType", e.target.value)}
-                className="h-9 w-full border border-input bg-background px-3 text-sm"
-              >
-                <option value="All">All car types</option>
-                <option>SUV</option>
-                <option>Sedan</option>
-                <option>Truck</option>
-              </select>
-            </label>
-            <label>
-              <span className="sr-only">Filter by condition</span>
-              <select
-                value={condition}
-                onChange={(e) => updateSearch("condition", e.target.value)}
-                className="h-9 w-full border border-input bg-background px-3 text-sm"
-              >
-                <option>All</option>
-                <option>New</option>
-                <option>Pre-owned</option>
-              </select>
-            </label>
+          <div className="grid gap-5 lg:grid-cols-3">
+            {marketplaceCategories.map((category) => {
+              const count = vehicles.filter(
+                (vehicle) =>
+                  vehicle.category === category.type || getCarType(vehicle.model) === category.type,
+              ).length;
+              return (
+                <Link
+                  key={category.type}
+                  to="/cars"
+                  search={{
+                    q: "",
+                    brand: "All",
+                    model: "All",
+                    carType: category.type,
+                    condition: "All",
+                  }}
+                  className="group relative min-h-64 overflow-hidden bg-navy"
+                >
+                  <img
+                    src={category.image}
+                    alt={`${category.type} vehicles`}
+                    className="absolute inset-0 h-full w-full object-cover opacity-70 transition duration-500 group-hover:scale-105 group-hover:opacity-85"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-surface-dark/35 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-6 text-primary-foreground">
+                    <div className="flex items-end justify-between gap-4">
+                      <div>
+                        <p className="text-xs font-bold uppercase text-primary-foreground/65">
+                          {count} listings
+                        </p>
+                        <h3 className="mt-2 text-3xl font-extrabold uppercase">{category.type}s</h3>
+                      </div>
+                      <ArrowRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                    </div>
+                    <p className="mt-2 max-w-sm text-sm leading-6 text-primary-foreground/70">
+                      {category.copy}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
-          <VehicleGrid items={shown} />
+        </div>
+      </section>
+      <section className="section-pad bg-background">
+        <div className="container-shell">
+          <div className="flex flex-wrap items-end justify-between gap-5">
+            <SectionHeading
+              eyebrow="Popular right now"
+              title="Browse By Model"
+              copy="Jump into a model collection and compare the options currently in the gallery."
+            />
+            <Link
+              to="/cars"
+              search={{ q: "", brand: "All", model: "All", carType: "All", condition: "All" }}
+              className="mb-10 inline-flex items-center gap-2 text-sm font-bold uppercase text-primary"
+            >
+              View full inventory <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 border-l border-t border-border sm:grid-cols-4">
+            {popularModels.map((item, index) => (
+              <Link
+                key={item}
+                to="/cars"
+                search={{ q: "", brand: "All", model: item, carType: "All", condition: "All" }}
+                className="group border-b border-r border-border p-5 transition-colors hover:bg-secondary"
+              >
+                <span className="text-xs font-bold text-destructive">0{index + 1}</span>
+                <span className="mt-7 block text-lg font-bold uppercase group-hover:text-primary">
+                  {item}
+                </span>
+                <span className="mt-3 inline-flex items-center gap-2 text-xs font-bold uppercase text-muted-foreground">
+                  Explore <ArrowRight className="h-3 w-3" />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className="section-pad">
+        <div className="container-shell">
+          <div className="mb-10 flex flex-wrap items-end justify-between gap-5">
+            <SectionHeading
+              eyebrow="Refine your shortlist"
+              title="All Marketplace Inventory"
+              copy="Use the filters to compare by brand, model, type, and condition."
+            />
+            <span className="mb-10 text-sm font-bold uppercase text-muted-foreground">
+              {shown.length} matching vehicles
+            </span>
+          </div>
+          <div className="mb-10 border border-border bg-secondary p-5">
+            <div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase text-primary">
+              <SlidersHorizontal className="h-4 w-4" />
+              Marketplace filters
+            </div>
+            <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-5">
+              <label>
+                <span className="sr-only">Search brand or model</span>
+                <div className="relative">
+                  <Search className="absolute left-3 top-2.5 h-4 w-4 text-primary" />
+                  <Input
+                    value={q}
+                    onChange={(e) => updateSearch("q", e.target.value)}
+                    placeholder="Search inventory"
+                    className="pl-9"
+                  />
+                </div>
+              </label>
+              <label>
+                <span className="sr-only">Filter by brand</span>
+                <select
+                  value={brand}
+                  onChange={(e) => updateSearch("brand", e.target.value)}
+                  className="h-9 w-full border border-input bg-background px-3 text-sm"
+                >
+                  <option value="All">All brands</option>
+                  {brands.map((item) => (
+                    <option key={item}>{item}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                <span className="sr-only">Filter by model</span>
+                <select
+                  value={model}
+                  onChange={(e) => updateSearch("model", e.target.value)}
+                  className="h-9 w-full border border-input bg-background px-3 text-sm"
+                >
+                  <option value="All">All models</option>
+                  {models.map((item) => (
+                    <option key={item}>{item}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                <span className="sr-only">Filter by car type</span>
+                <select
+                  value={carType}
+                  onChange={(e) => updateSearch("carType", e.target.value)}
+                  className="h-9 w-full border border-input bg-background px-3 text-sm"
+                >
+                  <option value="All">All car types</option>
+                  <option>SUV</option>
+                  <option>Sedan</option>
+                  <option>Truck</option>
+                </select>
+              </label>
+              <label>
+                <span className="sr-only">Filter by condition</span>
+                <select
+                  value={condition}
+                  onChange={(e) => updateSearch("condition", e.target.value)}
+                  className="h-9 w-full border border-input bg-background px-3 text-sm"
+                >
+                  <option>All</option>
+                  <option>New</option>
+                  <option>Pre-owned</option>
+                </select>
+              </label>
+            </div>
+          </div>
+          {!hasFilters && (
+            <div className="mb-16">
+              <div className="mb-6 flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs font-bold uppercase text-primary">Editor&apos;s picks</p>
+                  <h2 className="mt-2 text-3xl font-extrabold uppercase">Top Choices</h2>
+                </div>
+                <span className="hidden text-sm text-muted-foreground sm:block">
+                  A considered starting point for your search
+                </span>
+              </div>
+              <VehicleGrid items={featured} />
+            </div>
+          )}
+          <div className="border-t border-border pt-12">
+            <h2 className="mb-6 text-3xl font-extrabold uppercase">
+              {hasFilters ? "Matching Vehicles" : "Explore All Vehicles"}
+            </h2>
+            <VehicleGrid items={shown} />
+          </div>
           {shown.length === 0 && (
             <p className="py-16 text-center text-muted-foreground">
               No vehicles match that search. Contact us and we can source it.
@@ -194,6 +335,44 @@ function CarsPage() {
     </>
   );
 }
+
+function MarketplaceStat({
+  icon: Icon,
+  value,
+  label,
+}: {
+  icon: typeof CarFront;
+  value: number;
+  label: string;
+}) {
+  return (
+    <div className="flex items-center gap-4 p-6 sm:p-8">
+      <Icon className="h-8 w-8 shrink-0 text-primary" />
+      <div>
+        <p className="text-3xl font-extrabold">{value}</p>
+        <p className="text-xs font-bold uppercase text-muted-foreground">{label}</p>
+      </div>
+    </div>
+  );
+}
+
+const marketplaceCategories = [
+  {
+    type: "SUV",
+    image: hero,
+    copy: "Confident, versatile vehicles for family life, long trips, and everyday drive.",
+  },
+  {
+    type: "Sedan",
+    image: showroom,
+    copy: "Refined road cars with comfort, presence, and practical performance.",
+  },
+  {
+    type: "Truck",
+    image: globalImage,
+    copy: "Hard-working commercial vehicles for transport, trade, and ambitious operations.",
+  },
+] as const;
 
 function getCarType(model: string) {
   return /land cruiser|rx 350|range rover|santa fe|sport/i.test(model) ? "SUV" : "Sedan";
