@@ -64,8 +64,8 @@ function VehicleTypesPage() {
             {vehicleTypes.map((item) => (
               <Link
                 key={item.type}
-                to="/cars"
-                search={{ q: "", brand: "All", model: "All", carType: item.type, condition: "All" }}
+                to="/cars/types/$type"
+                params={{ type: item.type.toLowerCase() }}
                 className="group relative min-h-[420px] overflow-hidden bg-navy"
               >
                 <img

@@ -4,6 +4,13 @@ import { PageIntro, SectionHeading } from "@/components/marketplace";
 import { vehicles } from "@/lib/inventory";
 import hero from "@/assets/awa-showroom.jpg";
 
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 export const Route = createFileRoute("/cars/models")({
   head: () => ({
     meta: [
@@ -46,14 +53,8 @@ function VehicleModelsPage() {
             {models.map((vehicle) => (
               <Link
                 key={vehicle.model}
-                to="/cars"
-                search={{
-                  q: "",
-                  brand: "All",
-                  model: vehicle.model,
-                  carType: "All",
-                  condition: "All",
-                }}
+                to="/cars/models/$model"
+                params={{ model: slugify(vehicle.model) }}
                 className="group border-b border-r border-border bg-background p-5 transition-colors hover:bg-primary hover:text-primary-foreground"
               >
                 <div className="overflow-hidden bg-muted">

@@ -24,6 +24,8 @@ import { Route as CarsTypesRouteImport } from './routes/cars/types'
 import { Route as NewsIndexRouteImport } from './routes/news/index'
 import { Route as NewsSlugRouteImport } from './routes/news/$slug'
 import { Route as SparePartsSlugRouteImport } from './routes/spare-parts.$slug'
+import { Route as CarsModelsModelRouteImport } from './routes/cars/models/$model'
+import { Route as CarsTypesTypeRouteImport } from './routes/cars/types/$type'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -100,6 +102,16 @@ const SparePartsSlugRoute = SparePartsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => SparePartsRoute,
 } as any)
+const CarsModelsModelRoute = CarsModelsModelRouteImport.update({
+  id: '/$model',
+  path: '/$model',
+  getParentRoute: () => CarsModelsRoute,
+} as any)
+const CarsTypesTypeRoute = CarsTypesTypeRouteImport.update({
+  id: '/$type',
+  path: '/$type',
+  getParentRoute: () => CarsTypesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -112,11 +124,13 @@ export interface FileRoutesByFullPath {
   '/track-order': typeof TrackOrderRoute
   '/why-awa': typeof WhyAwaRoute
   '/cars/$slug': typeof CarsSlugRoute
-  '/cars/models': typeof CarsModelsRoute
-  '/cars/types': typeof CarsTypesRoute
+  '/cars/models': typeof CarsModelsRouteWithChildren
+  '/cars/types': typeof CarsTypesRouteWithChildren
   '/news/$slug': typeof NewsSlugRoute
   '/spare-parts/$slug': typeof SparePartsSlugRoute
   '/news/': typeof NewsIndexRoute
+  '/cars/models/$model': typeof CarsModelsModelRoute
+  '/cars/types/$type': typeof CarsTypesTypeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -129,11 +143,13 @@ export interface FileRoutesByTo {
   '/track-order': typeof TrackOrderRoute
   '/why-awa': typeof WhyAwaRoute
   '/cars/$slug': typeof CarsSlugRoute
-  '/cars/models': typeof CarsModelsRoute
-  '/cars/types': typeof CarsTypesRoute
+  '/cars/models': typeof CarsModelsRouteWithChildren
+  '/cars/types': typeof CarsTypesRouteWithChildren
   '/news/$slug': typeof NewsSlugRoute
   '/spare-parts/$slug': typeof SparePartsSlugRoute
   '/news': typeof NewsIndexRoute
+  '/cars/models/$model': typeof CarsModelsModelRoute
+  '/cars/types/$type': typeof CarsTypesTypeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -147,11 +163,13 @@ export interface FileRoutesById {
   '/track-order': typeof TrackOrderRoute
   '/why-awa': typeof WhyAwaRoute
   '/cars/$slug': typeof CarsSlugRoute
-  '/cars/models': typeof CarsModelsRoute
-  '/cars/types': typeof CarsTypesRoute
+  '/cars/models': typeof CarsModelsRouteWithChildren
+  '/cars/types': typeof CarsTypesRouteWithChildren
   '/news/$slug': typeof NewsSlugRoute
   '/spare-parts/$slug': typeof SparePartsSlugRoute
   '/news/': typeof NewsIndexRoute
+  '/cars/models/$model': typeof CarsModelsModelRoute
+  '/cars/types/$type': typeof CarsTypesTypeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -171,6 +189,8 @@ export interface FileRouteTypes {
     | '/news/$slug'
     | '/spare-parts/$slug'
     | '/news/'
+    | '/cars/models/$model'
+    | '/cars/types/$type'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -188,6 +208,8 @@ export interface FileRouteTypes {
     | '/news/$slug'
     | '/spare-parts/$slug'
     | '/news'
+    | '/cars/models/$model'
+    | '/cars/types/$type'
   id:
     | '__root__'
     | '/'
@@ -205,6 +227,8 @@ export interface FileRouteTypes {
     | '/news/$slug'
     | '/spare-parts/$slug'
     | '/news/'
+    | '/cars/models/$model'
+    | '/cars/types/$type'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -328,19 +352,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SparePartsSlugRouteImport
       parentRoute: typeof SparePartsRoute
     }
+    '/cars/models/$model': {
+      id: '/cars/models/$model'
+      path: '/$model'
+      fullPath: '/cars/models/$model'
+      preLoaderRoute: typeof CarsModelsModelRouteImport
+      parentRoute: typeof CarsModelsRoute
+    }
+    '/cars/types/$type': {
+      id: '/cars/types/$type'
+      path: '/$type'
+      fullPath: '/cars/types/$type'
+      preLoaderRoute: typeof CarsTypesTypeRouteImport
+      parentRoute: typeof CarsTypesRoute
+    }
   }
 }
 
+interface CarsModelsRouteChildren {
+  CarsModelsModelRoute: typeof CarsModelsModelRoute
+}
+
+const CarsModelsRouteChildren: CarsModelsRouteChildren = {
+  CarsModelsModelRoute: CarsModelsModelRoute,
+}
+
+const CarsModelsRouteWithChildren = CarsModelsRoute._addFileChildren(
+  CarsModelsRouteChildren,
+)
+
+interface CarsTypesRouteChildren {
+  CarsTypesTypeRoute: typeof CarsTypesTypeRoute
+}
+
+const CarsTypesRouteChildren: CarsTypesRouteChildren = {
+  CarsTypesTypeRoute: CarsTypesTypeRoute,
+}
+
+const CarsTypesRouteWithChildren = CarsTypesRoute._addFileChildren(
+  CarsTypesRouteChildren,
+)
+
 interface CarsRouteChildren {
   CarsSlugRoute: typeof CarsSlugRoute
-  CarsModelsRoute: typeof CarsModelsRoute
-  CarsTypesRoute: typeof CarsTypesRoute
+  CarsModelsRoute: typeof CarsModelsRouteWithChildren
+  CarsTypesRoute: typeof CarsTypesRouteWithChildren
 }
 
 const CarsRouteChildren: CarsRouteChildren = {
   CarsSlugRoute: CarsSlugRoute,
-  CarsModelsRoute: CarsModelsRoute,
-  CarsTypesRoute: CarsTypesRoute,
+  CarsModelsRoute: CarsModelsRouteWithChildren,
+  CarsTypesRoute: CarsTypesRouteWithChildren,
 }
 
 const CarsRouteWithChildren = CarsRoute._addFileChildren(CarsRouteChildren)
