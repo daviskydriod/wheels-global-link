@@ -172,9 +172,6 @@ function SearchSection() {
         </div>
         {query && (
           <div className="mt-6">
-            <p className="mb-4 text-sm font-bold uppercase text-muted-foreground">
-              {shown.length} matching vehicle{shown.length === 1 ? "" : "s"}
-            </p>
             {shown.length ? (
               <VehicleGrid items={shown} />
             ) : (
@@ -193,6 +190,7 @@ const categoryTiles = [
   {
     image: carsCategory,
     title: "By Brand",
+    route: "brand",
     copy: "Toyota, Lexus, Mercedes-Benz, BMW, Range Rover, Hyundai and more.",
     chips: ["Toyota", "Lexus", "Mercedes-Benz"],
     search: (value: string) => ({ q: "", brand: value, carType: "All", condition: "All" }),
@@ -201,6 +199,7 @@ const categoryTiles = [
   {
     image: showroom,
     title: "By Model",
+    route: "model",
     copy: "Land Cruiser, RX 350, E-Class, 5 Series, Sport and Santa Fe.",
     chips: ["Land Cruiser", "RX 350", "Santa Fe"],
     search: (value: string) => ({ q: value, brand: "All", carType: "All", condition: "All" }),
@@ -209,6 +208,7 @@ const categoryTiles = [
   {
     image: globalImage,
     title: "By Car Type",
+    route: "type",
     copy: "SUVs, sedans and trucks matched to how you'll actually use the vehicle.",
     chips: ["SUV", "Sedan", "Truck"],
     search: (value: string) => ({ q: "", brand: "All", carType: value, condition: "All" }),
@@ -246,19 +246,38 @@ function BrowseByCategory() {
                   {tile.copy}
                 </p>
                 <div className="mt-5 flex flex-wrap gap-2">
-                  {tile.chips.map((chip) => (
-                    <Link
-                      key={chip}
-                      to="/cars"
-                      search={tile.search(chip)}
-                      className="border border-primary-foreground/40 px-3 py-1.5 text-xs font-bold uppercase transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
-                    >
-                      {chip}
-                    </Link>
-                  ))}
+                  {tile.chips.map((chip) =>
+                    tile.route === "brand" ? (
+                      <Link
+                        key={chip}
+                        to="/cars"
+                        search={tile.search(chip)}
+                        className="border border-primary-foreground/40 px-3 py-1.5 text-xs font-bold uppercase transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                      >
+                        {chip}
+                      </Link>
+                    ) : (
+                      <Link
+                        key={chip}
+                        to={tile.route === "model" ? "/cars/models" : "/cars/types"}
+                        className="border border-primary-foreground/40 px-3 py-1.5 text-xs font-bold uppercase transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                      >
+                        {chip}
+                      </Link>
+                    ),
+                  )}
                 </div>
                 <Button asChild variant="inverse" className="mt-6">
-                  <Link to="/cars" search={tile.seeAll}>
+                  <Link
+                    to={
+                      tile.route === "brand"
+                        ? "/cars"
+                        : tile.route === "model"
+                          ? "/cars/models"
+                          : "/cars/types"
+                    }
+                    {...(tile.route === "brand" ? { search: tile.seeAll } : {})}
+                  >
                     See All {tile.title.replace("By ", "")}s
                     <ArrowRight />
                   </Link>
@@ -293,12 +312,11 @@ function MarketplacePreview() {
         </div>
         <div className="grid border-l border-t border-primary-foreground/15 sm:grid-cols-2">
           <Link
-            to="/cars"
-            search={{ q: "", brand: "All", model: "All", carType: "SUV", condition: "All" }}
+            to="/cars/types"
             className="group border-b border-r border-primary-foreground/15 p-6 transition-colors hover:bg-primary hover:text-primary-foreground"
           >
             <span className="text-xs font-bold uppercase text-primary-foreground/55 group-hover:text-primary-foreground/70">
-              01 / Vehicle type
+              Vehicle type
             </span>
             <h3 className="mt-8 text-2xl font-bold uppercase">Shop SUVs</h3>
             <p className="mt-2 text-sm text-primary-foreground/65 group-hover:text-primary-foreground/80">
@@ -307,12 +325,11 @@ function MarketplacePreview() {
             <ArrowRight className="mt-6 h-5 w-5" />
           </Link>
           <Link
-            to="/cars"
-            search={{ q: "", brand: "All", model: "All", carType: "Truck", condition: "All" }}
+            to="/cars/types"
             className="group border-b border-r border-primary-foreground/15 p-6 transition-colors hover:bg-primary hover:text-primary-foreground"
           >
             <span className="text-xs font-bold uppercase text-primary-foreground/55 group-hover:text-primary-foreground/70">
-              02 / Vehicle type
+              Vehicle type
             </span>
             <h3 className="mt-8 text-2xl font-bold uppercase">Shop Trucks</h3>
             <p className="mt-2 text-sm text-primary-foreground/65 group-hover:text-primary-foreground/80">
@@ -320,15 +337,14 @@ function MarketplacePreview() {
             </p>
             <ArrowRight className="mt-6 h-5 w-5" />
           </Link>
-          {models.slice(0, 2).map((model, index) => (
+          {models.slice(0, 2).map((model) => (
             <Link
               key={model}
-              to="/cars"
-              search={{ q: "", brand: "All", model, carType: "All", condition: "All" }}
+              to="/cars/models"
               className="group border-b border-r border-primary-foreground/15 p-6 transition-colors hover:bg-primary hover:text-primary-foreground"
             >
               <span className="text-xs font-bold uppercase text-primary-foreground/55 group-hover:text-primary-foreground/70">
-                0{index + 3} / Popular model
+                Popular model
               </span>
               <h3 className="mt-8 text-2xl font-bold uppercase">{model}</h3>
               <p className="mt-2 text-sm text-primary-foreground/65 group-hover:text-primary-foreground/80">
