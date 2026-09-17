@@ -37,6 +37,17 @@ function VehicleModelsPage() {
       />
       <section className="section-pad bg-secondary">
         <div className="container-shell">
+          <div className="mb-10 flex items-center gap-2 text-xs text-muted-foreground">
+            <Link to="/" className="hover:text-primary">
+              Home
+            </Link>
+            <span>/</span>
+            <Link to="/cars" className="hover:text-primary">
+              Cars
+            </Link>
+            <span>/</span>
+            <span className="font-semibold text-foreground">Models</span>
+          </div>
           <Link
             to="/cars"
             className="mb-10 inline-flex items-center gap-2 text-sm font-bold uppercase text-primary"

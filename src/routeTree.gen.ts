@@ -19,11 +19,13 @@ import { Route as SparePartsRouteImport } from './routes/spare-parts'
 import { Route as TrackOrderRouteImport } from './routes/track-order'
 import { Route as WhyAwaRouteImport } from './routes/why-awa'
 import { Route as CarsSlugRouteImport } from './routes/cars.$slug'
+import { Route as CarsBrandsRouteImport } from './routes/cars/brands'
 import { Route as CarsModelsRouteImport } from './routes/cars/models'
 import { Route as CarsTypesRouteImport } from './routes/cars/types'
 import { Route as NewsIndexRouteImport } from './routes/news/index'
 import { Route as NewsSlugRouteImport } from './routes/news/$slug'
 import { Route as SparePartsSlugRouteImport } from './routes/spare-parts.$slug'
+import { Route as CarsBrandsBrandRouteImport } from './routes/cars/brands/$brand'
 import { Route as CarsModelsModelRouteImport } from './routes/cars/models/$model'
 import { Route as CarsTypesTypeRouteImport } from './routes/cars/types/$type'
 
@@ -77,6 +79,11 @@ const CarsSlugRoute = CarsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => CarsRoute,
 } as any)
+const CarsBrandsRoute = CarsBrandsRouteImport.update({
+  id: '/brands',
+  path: '/brands',
+  getParentRoute: () => CarsRoute,
+} as any)
 const CarsModelsRoute = CarsModelsRouteImport.update({
   id: '/models',
   path: '/models',
@@ -102,6 +109,11 @@ const SparePartsSlugRoute = SparePartsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => SparePartsRoute,
 } as any)
+const CarsBrandsBrandRoute = CarsBrandsBrandRouteImport.update({
+  id: '/$brand',
+  path: '/$brand',
+  getParentRoute: () => CarsBrandsRoute,
+} as any)
 const CarsModelsModelRoute = CarsModelsModelRouteImport.update({
   id: '/$model',
   path: '/$model',
@@ -124,11 +136,13 @@ export interface FileRoutesByFullPath {
   '/track-order': typeof TrackOrderRoute
   '/why-awa': typeof WhyAwaRoute
   '/cars/$slug': typeof CarsSlugRoute
+  '/cars/brands': typeof CarsBrandsRouteWithChildren
   '/cars/models': typeof CarsModelsRouteWithChildren
   '/cars/types': typeof CarsTypesRouteWithChildren
   '/news/$slug': typeof NewsSlugRoute
   '/spare-parts/$slug': typeof SparePartsSlugRoute
   '/news/': typeof NewsIndexRoute
+  '/cars/brands/$brand': typeof CarsBrandsBrandRoute
   '/cars/models/$model': typeof CarsModelsModelRoute
   '/cars/types/$type': typeof CarsTypesTypeRoute
 }
@@ -143,11 +157,13 @@ export interface FileRoutesByTo {
   '/track-order': typeof TrackOrderRoute
   '/why-awa': typeof WhyAwaRoute
   '/cars/$slug': typeof CarsSlugRoute
+  '/cars/brands': typeof CarsBrandsRouteWithChildren
   '/cars/models': typeof CarsModelsRouteWithChildren
   '/cars/types': typeof CarsTypesRouteWithChildren
   '/news/$slug': typeof NewsSlugRoute
   '/spare-parts/$slug': typeof SparePartsSlugRoute
   '/news': typeof NewsIndexRoute
+  '/cars/brands/$brand': typeof CarsBrandsBrandRoute
   '/cars/models/$model': typeof CarsModelsModelRoute
   '/cars/types/$type': typeof CarsTypesTypeRoute
 }
@@ -163,11 +179,13 @@ export interface FileRoutesById {
   '/track-order': typeof TrackOrderRoute
   '/why-awa': typeof WhyAwaRoute
   '/cars/$slug': typeof CarsSlugRoute
+  '/cars/brands': typeof CarsBrandsRouteWithChildren
   '/cars/models': typeof CarsModelsRouteWithChildren
   '/cars/types': typeof CarsTypesRouteWithChildren
   '/news/$slug': typeof NewsSlugRoute
   '/spare-parts/$slug': typeof SparePartsSlugRoute
   '/news/': typeof NewsIndexRoute
+  '/cars/brands/$brand': typeof CarsBrandsBrandRoute
   '/cars/models/$model': typeof CarsModelsModelRoute
   '/cars/types/$type': typeof CarsTypesTypeRoute
 }
@@ -184,11 +202,13 @@ export interface FileRouteTypes {
     | '/track-order'
     | '/why-awa'
     | '/cars/$slug'
+    | '/cars/brands'
     | '/cars/models'
     | '/cars/types'
     | '/news/$slug'
     | '/spare-parts/$slug'
     | '/news/'
+    | '/cars/brands/$brand'
     | '/cars/models/$model'
     | '/cars/types/$type'
   fileRoutesByTo: FileRoutesByTo
@@ -203,11 +223,13 @@ export interface FileRouteTypes {
     | '/track-order'
     | '/why-awa'
     | '/cars/$slug'
+    | '/cars/brands'
     | '/cars/models'
     | '/cars/types'
     | '/news/$slug'
     | '/spare-parts/$slug'
     | '/news'
+    | '/cars/brands/$brand'
     | '/cars/models/$model'
     | '/cars/types/$type'
   id:
@@ -222,11 +244,13 @@ export interface FileRouteTypes {
     | '/track-order'
     | '/why-awa'
     | '/cars/$slug'
+    | '/cars/brands'
     | '/cars/models'
     | '/cars/types'
     | '/news/$slug'
     | '/spare-parts/$slug'
     | '/news/'
+    | '/cars/brands/$brand'
     | '/cars/models/$model'
     | '/cars/types/$type'
   fileRoutesById: FileRoutesById
@@ -317,6 +341,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CarsSlugRouteImport
       parentRoute: typeof CarsRoute
     }
+    '/cars/brands': {
+      id: '/cars/brands'
+      path: '/brands'
+      fullPath: '/cars/brands'
+      preLoaderRoute: typeof CarsBrandsRouteImport
+      parentRoute: typeof CarsRoute
+    }
     '/cars/models': {
       id: '/cars/models'
       path: '/models'
@@ -352,6 +383,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SparePartsSlugRouteImport
       parentRoute: typeof SparePartsRoute
     }
+    '/cars/brands/$brand': {
+      id: '/cars/brands/$brand'
+      path: '/$brand'
+      fullPath: '/cars/brands/$brand'
+      preLoaderRoute: typeof CarsBrandsBrandRouteImport
+      parentRoute: typeof CarsBrandsRoute
+    }
     '/cars/models/$model': {
       id: '/cars/models/$model'
       path: '/$model'
@@ -368,6 +406,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface CarsBrandsRouteChildren {
+  CarsBrandsBrandRoute: typeof CarsBrandsBrandRoute
+}
+
+const CarsBrandsRouteChildren: CarsBrandsRouteChildren = {
+  CarsBrandsBrandRoute: CarsBrandsBrandRoute,
+}
+
+const CarsBrandsRouteWithChildren = CarsBrandsRoute._addFileChildren(
+  CarsBrandsRouteChildren,
+)
 
 interface CarsModelsRouteChildren {
   CarsModelsModelRoute: typeof CarsModelsModelRoute
@@ -395,12 +445,14 @@ const CarsTypesRouteWithChildren = CarsTypesRoute._addFileChildren(
 
 interface CarsRouteChildren {
   CarsSlugRoute: typeof CarsSlugRoute
+  CarsBrandsRoute: typeof CarsBrandsRouteWithChildren
   CarsModelsRoute: typeof CarsModelsRouteWithChildren
   CarsTypesRoute: typeof CarsTypesRouteWithChildren
 }
 
 const CarsRouteChildren: CarsRouteChildren = {
   CarsSlugRoute: CarsSlugRoute,
+  CarsBrandsRoute: CarsBrandsRouteWithChildren,
   CarsModelsRoute: CarsModelsRouteWithChildren,
   CarsTypesRoute: CarsTypesRouteWithChildren,
 }

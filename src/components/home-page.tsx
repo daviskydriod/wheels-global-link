@@ -216,6 +216,13 @@ const categoryTiles = [
   },
 ] as const;
 
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 function BrowseByCategory() {
   return (
     <motion.section {...reveal} className="section-pad bg-background">
@@ -250,8 +257,8 @@ function BrowseByCategory() {
                     tile.route === "brand" ? (
                       <Link
                         key={chip}
-                        to="/cars"
-                        search={tile.search(chip)}
+                        to="/cars/brands/$brand"
+                        params={{ brand: slugify(chip) }}
                         className="border border-primary-foreground/40 px-3 py-1.5 text-xs font-bold uppercase transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
                       >
                         {chip}
@@ -271,12 +278,11 @@ function BrowseByCategory() {
                   <Link
                     to={
                       tile.route === "brand"
-                        ? "/cars"
+                        ? "/cars/brands"
                         : tile.route === "model"
                           ? "/cars/models"
                           : "/cars/types"
                     }
-                    {...(tile.route === "brand" ? { search: tile.seeAll } : {})}
                   >
                     See All {tile.title.replace("By ", "")}s
                     <ArrowRight />
