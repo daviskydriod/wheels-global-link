@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { vehicles } from "@/lib/inventory";
+import { getVehicleFallbackImage, vehicles } from "@/lib/inventory";
 import { whatsappUrl } from "@/components/site-shell";
 
 export const Route = createFileRoute("/cars/$slug")({
@@ -83,6 +83,10 @@ function VehicleDetail() {
             <div className="overflow-hidden border border-border bg-background shadow-sm">
               <img
                 src={activeImage}
+                onError={(event) => {
+                  event.currentTarget.onerror = null;
+                  event.currentTarget.src = getVehicleFallbackImage(vehicle.category);
+                }}
                 alt={`${vehicle.year} ${vehicle.brand} ${vehicle.model}`}
                 width={1200}
                 height={760}

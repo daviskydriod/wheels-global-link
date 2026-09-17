@@ -4,6 +4,7 @@ import mercedes from "@/assets/car-mercedes-e.jpg";
 import bmw from "@/assets/car-bmw-5.jpg";
 import rangeRover from "@/assets/car-range-rover.jpg";
 import hyundai from "@/assets/car-hyundai.jpg";
+import globalImage from "@/assets/awa-global.jpg";
 import partsImage from "@/assets/awa-parts-category.jpg";
 import { importedVehicles } from "@/lib/alibaba-import";
 
@@ -27,6 +28,12 @@ export type Vehicle = {
   category?: string;
   source?: string;
 };
+
+export function getVehicleFallbackImage(category?: string) {
+  if (category === "Truck") return globalImage;
+  if (category === "Sedan") return mercedes;
+  return category === "SUV" ? landCruiser : lexus;
+}
 const localVehicles: Vehicle[] = [
   {
     slug: "toyota-land-cruiser",
