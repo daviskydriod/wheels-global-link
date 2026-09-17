@@ -73,6 +73,8 @@ const vehicleWords =
   /\b(suv|sedan|saloon|hatchback|coupe|convertible|pickup|pick-up|truck|van|mpv|automobile|vehicle|car|ev|electric|hybrid|limousine|supercar|sports car)\b/i;
 const nonVehicleWords =
   /\b(tire|tires|tyre|tyres|wheel|wheels|rim|rims|brake|engine part|piston|filter|camper|battery|accessor|door|bumper|light|headlight|headlights|projector|lens|motorcycle|bike|tent|roof top|fender|caravan)\b/i;
+const excludedVehicleTitles =
+  /\b(for for limited 2\.5l gasoline suv|2026 dongfeng t5 evo premium sedan suv automatic turbo)\b/i;
 
 function parseCsv(csv: string): AlibabaRow[] {
   const rows: string[][] = [];
@@ -168,7 +170,12 @@ function toVehicle(row: AlibabaRow, index: number, category: "SUV" | "Sedan" | "
 
 const importedRows = csvFiles
   .flatMap(parseCsv)
-  .filter((row) => vehicleWords.test(row.title) && !nonVehicleWords.test(row.title))
+  .filter(
+    (row) =>
+      vehicleWords.test(row.title) &&
+      !nonVehicleWords.test(row.title) &&
+      !excludedVehicleTitles.test(row.title),
+  )
   .filter((row, index, rows) => {
     const productLink = row.productUrl.trim().toLowerCase();
     const imageLink = row.imageUrl.trim().toLowerCase();
