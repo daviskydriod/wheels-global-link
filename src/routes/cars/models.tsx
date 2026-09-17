@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { PageIntro, SectionHeading } from "@/components/marketplace";
-import { vehicles } from "@/lib/inventory";
+import { getVehicleFallbackImage, vehicles } from "@/lib/inventory";
 import hero from "@/assets/awa-showroom.jpg";
 
 function slugify(value: string) {
@@ -60,6 +60,10 @@ function VehicleModelsPage() {
                 <div className="overflow-hidden bg-muted">
                   <img
                     src={vehicle.image}
+                    onError={(event) => {
+                      event.currentTarget.onerror = null;
+                      event.currentTarget.src = getVehicleFallbackImage(vehicle.category);
+                    }}
                     alt={vehicle.model}
                     className="aspect-[16/10] w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />

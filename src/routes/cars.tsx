@@ -1,10 +1,12 @@
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useMemo } from "react";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, Search, SlidersHorizontal } from "lucide-react";
 import { PageIntro, SectionHeading, VehicleGrid } from "@/components/marketplace";
 import { Input } from "@/components/ui/input";
 import { vehicles } from "@/lib/inventory";
 import hero from "@/assets/awa-cars-category.jpg";
+import globalImage from "@/assets/awa-global.jpg";
+import showroom from "@/assets/awa-showroom.jpg";
 
 export const Route = createFileRoute("/cars")({
   validateSearch: (search) => ({
@@ -69,6 +71,42 @@ function CarsPage() {
         copy="Search the full gallery, refine by brand and condition, and build a shortlist for comparison."
         image={hero}
       />
+      <section className="section-pad bg-secondary">
+        <div className="container-shell">
+          <SectionHeading
+            eyebrow="Browse by type"
+            title="Choose Your Vehicle Shape"
+            copy="Explore the dedicated category pages, then return here to refine your shortlist."
+          />
+          <div className="grid gap-5 lg:grid-cols-3">
+            {vehicleTypeCategories.map((category) => (
+              <Link
+                key={category.type}
+                to="/cars/types/$type"
+                params={{ type: category.type.toLowerCase() }}
+                className="group relative min-h-56 overflow-hidden bg-navy"
+              >
+                <img
+                  src={category.image}
+                  alt={`${category.type} vehicles`}
+                  className="absolute inset-0 h-full w-full object-cover opacity-70 transition duration-500 group-hover:scale-105 group-hover:opacity-85"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-surface-dark/30 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-6 text-primary-foreground">
+                  <h2 className="text-3xl font-extrabold uppercase">{category.type}s</h2>
+                  <p className="mt-2 max-w-sm text-sm leading-6 text-primary-foreground/70">
+                    {category.copy}
+                  </p>
+                  <span className="mt-5 inline-flex items-center gap-2 text-xs font-bold uppercase">
+                    Explore category{" "}
+                    <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
       <section className="section-pad">
         <div className="container-shell">
           <div className="mb-10 flex flex-wrap items-end justify-between gap-5">
@@ -234,3 +272,21 @@ function CarsPage() {
 function getCarType(model: string) {
   return /land cruiser|rx 350|range rover|santa fe|sport/i.test(model) ? "SUV" : "Sedan";
 }
+
+const vehicleTypeCategories = [
+  {
+    type: "SUV",
+    image: hero,
+    copy: "Confident, versatile vehicles for family life and long trips.",
+  },
+  {
+    type: "Sedan",
+    image: showroom,
+    copy: "Refined road cars with comfort and practical performance.",
+  },
+  {
+    type: "Truck",
+    image: globalImage,
+    copy: "Hard-working vehicles for transport, trade, and operations.",
+  },
+] as const;
