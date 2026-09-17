@@ -3,6 +3,27 @@ import exportTwo from "@/assets/alibaba_export_1789650256829.csv?raw";
 import exportThree from "@/assets/alibaba_export_1789650300144.csv?raw";
 import exportFour from "@/assets/alibaba_export_1789650338709.csv?raw";
 import exportFive from "@/assets/alibaba_export_1789650374209.csv?raw";
+import exportSix from "@/alibaba_export_1789654249532.csv?raw";
+import exportSeven from "@/alibaba_export_1789654303249.csv?raw";
+import exportEight from "@/alibaba_export_1789654320692.csv?raw";
+import exportNine from "@/alibaba_export_1789654419335.csv?raw";
+import exportTen from "@/alibaba_export_1789654500614.csv?raw";
+import exportEleven from "@/alibaba_export_1789654521283.csv?raw";
+import exportTwelve from "@/alibaba_export_1789654595686.csv?raw";
+import exportThirteen from "@/alibaba_export_1789654632295.csv?raw";
+import exportFourteen from "@/alibaba_export_1789654666644.csv?raw";
+import exportFifteen from "@/alibaba_export_1789654690202.csv?raw";
+import exportSixteen from "@/alibaba_export_1789654772486.csv?raw";
+import exportSeventeen from "@/alibaba_export_1789654801866.csv?raw";
+import exportEighteen from "@/alibaba_export_1789654831830.csv?raw";
+import exportNineteen from "@/alibaba_export_1789654895386.csv?raw";
+import exportTwenty from "@/alibaba_export_1789654970842.csv?raw";
+import exportTwentyOne from "@/alibaba_export_1789655135948.csv?raw";
+import exportTwentyTwo from "@/alibaba_export_1789655156877.csv?raw";
+import exportTwentyThree from "@/alibaba_export_1789655228991.csv?raw";
+import exportTwentyFour from "@/alibaba_export_1789655268608.csv?raw";
+import exportTwentyFive from "@/alibaba_export_1789655432779.csv?raw";
+import exportTwentySix from "@/alibaba_export_1789655444402.csv?raw";
 import type { Vehicle } from "@/lib/inventory";
 
 type AlibabaRow = {
@@ -20,11 +41,38 @@ type AlibabaRow = {
   supplierCountry: string;
 };
 
-const csvFiles = [exportOne, exportTwo, exportThree, exportFour, exportFive];
+const csvFiles = [
+  exportOne,
+  exportTwo,
+  exportThree,
+  exportFour,
+  exportFive,
+  exportSix,
+  exportSeven,
+  exportEight,
+  exportNine,
+  exportTen,
+  exportEleven,
+  exportTwelve,
+  exportThirteen,
+  exportFourteen,
+  exportFifteen,
+  exportSixteen,
+  exportSeventeen,
+  exportEighteen,
+  exportNineteen,
+  exportTwenty,
+  exportTwentyOne,
+  exportTwentyTwo,
+  exportTwentyThree,
+  exportTwentyFour,
+  exportTwentyFive,
+  exportTwentySix,
+];
 const vehicleWords =
   /\b(suv|sedan|saloon|hatchback|coupe|convertible|pickup|pick-up|truck|van|mpv|automobile|vehicle|car|ev|electric|hybrid|limousine|supercar|sports car)\b/i;
 const nonVehicleWords =
-  /\b(tire|tires|tyre|tyres|wheel|wheels|rim|rims|brake|engine part|piston|filter|trailer|camper|battery|accessor|door|bumper|light|headlight|headlights|projector|lens|motorcycle|bike|tent|roof top|fender|caravan|cargo truck|pickup truck)\b/i;
+  /\b(tire|tires|tyre|tyres|wheel|wheels|rim|rims|brake|engine part|piston|filter|camper|battery|accessor|door|bumper|light|headlight|headlights|projector|lens|motorcycle|bike|tent|roof top|fender|caravan)\b/i;
 
 function parseCsv(csv: string): AlibabaRow[] {
   const rows: string[][] = [];
@@ -76,7 +124,7 @@ function firstMatch(value: string, expression: RegExp, fallback: string) {
   return value.match(expression)?.[1] ?? fallback;
 }
 
-function toVehicle(row: AlibabaRow, index: number, category: "SUV" | "Sedan"): Vehicle {
+function toVehicle(row: AlibabaRow, index: number, category: "SUV" | "Sedan" | "Truck"): Vehicle {
   const title = row.title.replace(/\s+/g, " ").trim();
   const year = Number(title.match(/\b(20\d{2})\b/)?.[1] ?? 2024);
   const slug = `alibaba-${category.toLowerCase()}-${slugify(title)}-${index}`;
@@ -137,8 +185,12 @@ const importedSuvs = importedRows
 const importedSedans = importedRows
   .filter((row) => /\b(sedan|saloon)\b/i.test(row.title))
   .slice(0, 50);
+const importedTrucks = importedRows
+  .filter((row) => !/\b(suv|4x4|sport utility|crossover|sedan|saloon)\b/i.test(row.title))
+  .slice(0, 100);
 
 export const importedVehicles: Vehicle[] = [
   ...importedSuvs.map((row, index) => toVehicle(row, index, "SUV")),
   ...importedSedans.map((row, index) => toVehicle(row, index, "Sedan")),
+  ...importedTrucks.map((row, index) => toVehicle(row, index, "Truck")),
 ];

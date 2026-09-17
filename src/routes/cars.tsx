@@ -39,7 +39,7 @@ function CarsPage() {
         (v) =>
           `${v.brand} ${v.model}`.toLowerCase().includes(query.toLowerCase()) &&
           (condition === "All" || v.condition === condition) &&
-          (carType === "All" || getCarType(v.model) === carType),
+          (carType === "All" || v.category === carType || getCarType(v.model) === carType),
       ),
     [query, condition, carType],
   );
@@ -70,7 +70,11 @@ function CarsPage() {
             </label>
             <label>
               <span className="sr-only">Filter by car type</span>
-              <select value={carType} onChange={(e) => setCarType(e.target.value)} className="h-9 w-full border border-input bg-background px-3 text-sm">
+              <select
+                value={carType}
+                onChange={(e) => setCarType(e.target.value)}
+                className="h-9 w-full border border-input bg-background px-3 text-sm"
+              >
                 <option value="All">All car types</option>
                 <option>SUV</option>
                 <option>Sedan</option>
