@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useMemo } from "react";
-import { ArrowRight, CarFront, Layers3, Search, SlidersHorizontal, Sparkles } from "lucide-react";
+import { ArrowRight, Search, SlidersHorizontal } from "lucide-react";
 import { PageIntro, SectionHeading, VehicleGrid } from "@/components/marketplace";
 import { Input } from "@/components/ui/input";
 import { vehicles } from "@/lib/inventory";
@@ -72,17 +72,6 @@ function CarsPage() {
         copy="Shop by vehicle type, browse popular models, or use the marketplace filters to narrow your shortlist."
         image={hero}
       />
-      <section className="border-b border-border bg-background">
-        <div className="container-shell grid divide-y border-x border-border sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-          <MarketplaceStat
-            icon={CarFront}
-            value={vehicles.length}
-            label="Vehicles in the gallery"
-          />
-          <MarketplaceStat icon={Layers3} value={brands.length} label="Brands to explore" />
-          <MarketplaceStat icon={Sparkles} value={popularModels.length} label="Popular models" />
-        </div>
-      </section>
       <section className="section-pad bg-secondary">
         <div className="container-shell">
           <SectionHeading
@@ -92,10 +81,6 @@ function CarsPage() {
           />
           <div className="grid gap-5 lg:grid-cols-3">
             {marketplaceCategories.map((category) => {
-              const count = vehicles.filter(
-                (vehicle) =>
-                  vehicle.category === category.type || getCarType(vehicle.model) === category.type,
-              ).length;
               return (
                 <Link
                   key={category.type}
@@ -118,9 +103,6 @@ function CarsPage() {
                   <div className="absolute inset-x-0 bottom-0 p-6 text-primary-foreground">
                     <div className="flex items-end justify-between gap-4">
                       <div>
-                        <p className="text-xs font-bold uppercase text-primary-foreground/65">
-                          {count} listings
-                        </p>
                         <h3 className="mt-2 text-3xl font-extrabold uppercase">{category.type}s</h3>
                       </div>
                       <ArrowRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
@@ -179,9 +161,6 @@ function CarsPage() {
               title="All Marketplace Inventory"
               copy="Use the filters to compare by brand, model, type, and condition."
             />
-            <span className="mb-10 text-sm font-bold uppercase text-muted-foreground">
-              {shown.length} matching vehicles
-            </span>
           </div>
           <div className="mb-10 border border-border bg-secondary p-5">
             <div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase text-primary">
@@ -333,26 +312,6 @@ function CarsPage() {
         </div>
       </section>
     </>
-  );
-}
-
-function MarketplaceStat({
-  icon: Icon,
-  value,
-  label,
-}: {
-  icon: typeof CarFront;
-  value: number;
-  label: string;
-}) {
-  return (
-    <div className="flex items-center gap-4 p-6 sm:p-8">
-      <Icon className="h-8 w-8 shrink-0 text-primary" />
-      <div>
-        <p className="text-3xl font-extrabold">{value}</p>
-        <p className="text-xs font-bold uppercase text-muted-foreground">{label}</p>
-      </div>
-    </div>
   );
 }
 

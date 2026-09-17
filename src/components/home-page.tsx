@@ -99,7 +99,50 @@ export function HomePage() {
 }
 
 function Hero() {
-  return <section className="relative min-h-[calc(100svh-5rem)] overflow-hidden bg-navy text-primary-foreground"><img src={hero} alt="Premium SUV in a modern city showroom" width={1920} height={1080} fetchPriority="high" className="absolute inset-0 h-full w-full object-cover object-[62%_center]"/><div className="absolute inset-0 bg-gradient-to-r from-surface-dark via-surface-dark/70 to-transparent"/><div className="container-shell relative flex min-h-[calc(100svh-5rem)] items-center py-16"><div className="max-w-3xl"><motion.p initial={{opacity:0}} animate={{opacity:1}} className="mb-5 flex items-center gap-3 text-sm font-bold uppercase"><span className="h-0.5 w-10 bg-destructive"/>Guangzhou · Global Automotive Sourcing</motion.p><motion.h1 initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{duration:.6}} className="text-5xl font-extrabold uppercase leading-[.9] sm:text-7xl lg:text-8xl">Your Trusted Source for <span className="text-primary">Cars</span></motion.h1><p className="mt-6 max-w-xl text-base leading-7 text-primary-foreground/75 sm:text-lg">Quality vehicles, sourced in China and supplied globally.</p><div className="mt-8 flex flex-wrap gap-3"><Button asChild size="lg"><Link to="/cars">Browse Cars<ArrowRight/></Link></Button></div></div></div></section>;
+  return (
+    <section className="relative min-h-[calc(100svh-5rem)] overflow-hidden bg-navy text-primary-foreground">
+      <img
+        src={hero}
+        alt="Premium SUV in a modern city showroom"
+        width={1920}
+        height={1080}
+        fetchPriority="high"
+        className="absolute inset-0 h-full w-full object-cover object-[62%_center]"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-surface-dark via-surface-dark/70 to-transparent" />
+      <div className="container-shell relative flex min-h-[calc(100svh-5rem)] items-center py-16">
+        <div className="max-w-3xl">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mb-5 flex items-center gap-3 text-sm font-bold uppercase"
+          >
+            <span className="h-0.5 w-10 bg-destructive" />
+            Guangzhou · Global Automotive Sourcing
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-5xl font-extrabold uppercase leading-[.9] sm:text-7xl lg:text-8xl"
+          >
+            Your Trusted Source for <span className="text-primary">Cars</span>
+          </motion.h1>
+          <p className="mt-6 max-w-xl text-base leading-7 text-primary-foreground/75 sm:text-lg">
+            Quality vehicles, sourced in China and supplied globally.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button asChild size="lg">
+              <Link to="/cars">
+                Browse Cars
+                <ArrowRight />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 function SearchSection() {
@@ -184,7 +227,10 @@ function BrowseByCategory() {
         />
         <div className="grid gap-5 lg:grid-cols-3">
           {categoryTiles.map((tile) => (
-            <article key={tile.title} className="group relative min-h-[430px] overflow-hidden bg-navy">
+            <article
+              key={tile.title}
+              className="group relative min-h-[430px] overflow-hidden bg-navy"
+            >
               <img
                 src={tile.image}
                 alt={`${tile.title} available through AWA AUTO MALL`}
@@ -196,7 +242,9 @@ function BrowseByCategory() {
               <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-surface-dark/20 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-7 text-primary-foreground sm:p-9">
                 <h3 className="text-3xl font-extrabold uppercase">{tile.title}</h3>
-                <p className="mt-2 max-w-md text-sm leading-6 text-primary-foreground/70">{tile.copy}</p>
+                <p className="mt-2 max-w-md text-sm leading-6 text-primary-foreground/70">
+                  {tile.copy}
+                </p>
                 <div className="mt-5 flex flex-wrap gap-2">
                   {tile.chips.map((chip) => (
                     <Link
@@ -239,41 +287,53 @@ function MarketplacePreview() {
             Make Your Search More Specific
           </h2>
           <p className="mt-5 max-w-xl leading-7 text-primary-foreground/70">
-            Start broad with a vehicle type, get specific with a model, then compare the options that fit your brief.
+            Start broad with a vehicle type, get specific with a model, then compare the options
+            that fit your brief.
           </p>
-          <div className="mt-8 grid grid-cols-3 border-l border-t border-primary-foreground/15">
-            <div className="border-b border-r border-primary-foreground/15 p-4">
-              <span className="block text-2xl font-extrabold text-primary">{vehicles.length}</span>
-              <span className="mt-1 block text-[10px] font-bold uppercase text-primary-foreground/60">Vehicles</span>
-            </div>
-            <div className="border-b border-r border-primary-foreground/15 p-4">
-              <span className="block text-2xl font-extrabold text-primary">3</span>
-              <span className="mt-1 block text-[10px] font-bold uppercase text-primary-foreground/60">Vehicle types</span>
-            </div>
-            <div className="border-b border-r border-primary-foreground/15 p-4">
-              <span className="block text-2xl font-extrabold text-primary">{new Set(vehicles.map((vehicle) => vehicle.brand)).size}</span>
-              <span className="mt-1 block text-[10px] font-bold uppercase text-primary-foreground/60">Brands</span>
-            </div>
-          </div>
         </div>
         <div className="grid border-l border-t border-primary-foreground/15 sm:grid-cols-2">
-          <Link to="/cars" search={{ q: "", brand: "All", model: "All", carType: "SUV", condition: "All" }} className="group border-b border-r border-primary-foreground/15 p-6 transition-colors hover:bg-primary hover:text-primary-foreground">
-            <span className="text-xs font-bold uppercase text-primary-foreground/55 group-hover:text-primary-foreground/70">01 / Vehicle type</span>
+          <Link
+            to="/cars"
+            search={{ q: "", brand: "All", model: "All", carType: "SUV", condition: "All" }}
+            className="group border-b border-r border-primary-foreground/15 p-6 transition-colors hover:bg-primary hover:text-primary-foreground"
+          >
+            <span className="text-xs font-bold uppercase text-primary-foreground/55 group-hover:text-primary-foreground/70">
+              01 / Vehicle type
+            </span>
             <h3 className="mt-8 text-2xl font-bold uppercase">Shop SUVs</h3>
-            <p className="mt-2 text-sm text-primary-foreground/65 group-hover:text-primary-foreground/80">Versatile vehicles for family and everyday use.</p>
+            <p className="mt-2 text-sm text-primary-foreground/65 group-hover:text-primary-foreground/80">
+              Versatile vehicles for family and everyday use.
+            </p>
             <ArrowRight className="mt-6 h-5 w-5" />
           </Link>
-          <Link to="/cars" search={{ q: "", brand: "All", model: "All", carType: "Truck", condition: "All" }} className="group border-b border-r border-primary-foreground/15 p-6 transition-colors hover:bg-primary hover:text-primary-foreground">
-            <span className="text-xs font-bold uppercase text-primary-foreground/55 group-hover:text-primary-foreground/70">02 / Vehicle type</span>
+          <Link
+            to="/cars"
+            search={{ q: "", brand: "All", model: "All", carType: "Truck", condition: "All" }}
+            className="group border-b border-r border-primary-foreground/15 p-6 transition-colors hover:bg-primary hover:text-primary-foreground"
+          >
+            <span className="text-xs font-bold uppercase text-primary-foreground/55 group-hover:text-primary-foreground/70">
+              02 / Vehicle type
+            </span>
             <h3 className="mt-8 text-2xl font-bold uppercase">Shop Trucks</h3>
-            <p className="mt-2 text-sm text-primary-foreground/65 group-hover:text-primary-foreground/80">Commercial options for work and logistics.</p>
+            <p className="mt-2 text-sm text-primary-foreground/65 group-hover:text-primary-foreground/80">
+              Commercial options for work and logistics.
+            </p>
             <ArrowRight className="mt-6 h-5 w-5" />
           </Link>
           {models.slice(0, 2).map((model, index) => (
-            <Link key={model} to="/cars" search={{ q: "", brand: "All", model, carType: "All", condition: "All" }} className="group border-b border-r border-primary-foreground/15 p-6 transition-colors hover:bg-primary hover:text-primary-foreground">
-              <span className="text-xs font-bold uppercase text-primary-foreground/55 group-hover:text-primary-foreground/70">0{index + 3} / Popular model</span>
+            <Link
+              key={model}
+              to="/cars"
+              search={{ q: "", brand: "All", model, carType: "All", condition: "All" }}
+              className="group border-b border-r border-primary-foreground/15 p-6 transition-colors hover:bg-primary hover:text-primary-foreground"
+            >
+              <span className="text-xs font-bold uppercase text-primary-foreground/55 group-hover:text-primary-foreground/70">
+                0{index + 3} / Popular model
+              </span>
               <h3 className="mt-8 text-2xl font-bold uppercase">{model}</h3>
-              <p className="mt-2 text-sm text-primary-foreground/65 group-hover:text-primary-foreground/80">See available listings and specifications.</p>
+              <p className="mt-2 text-sm text-primary-foreground/65 group-hover:text-primary-foreground/80">
+                See available listings and specifications.
+              </p>
               <ArrowRight className="mt-6 h-5 w-5" />
             </Link>
           ))}
@@ -338,10 +398,17 @@ export function WhySection() {
         <SectionHeading eyebrow="Why AWA" title="Why Choose AWA AUTO MALL?" />
         <div className="grid border-l border-t border-border md:grid-cols-2 lg:grid-cols-3">
           {reasons.map(([Icon, title, copy], i) => (
-            <article key={String(title)} className="group border-b border-r border-border p-7 transition-colors hover:border-primary hover:bg-accent">
-              <span className="text-sm font-bold text-destructive group-hover:text-primary">0{i + 1}</span>
+            <article
+              key={String(title)}
+              className="group border-b border-r border-border p-7 transition-colors hover:border-primary hover:bg-accent"
+            >
+              <span className="text-sm font-bold text-destructive group-hover:text-primary">
+                0{i + 1}
+              </span>
               <Icon className="mt-8 h-8 w-8 text-primary transition-colors group-hover:text-destructive" />
-              <h3 className="mt-5 text-2xl font-bold uppercase transition-colors group-hover:text-primary">{String(title)}</h3>
+              <h3 className="mt-5 text-2xl font-bold uppercase transition-colors group-hover:text-primary">
+                {String(title)}
+              </h3>
               <p className="mt-3 text-sm leading-6 text-muted-foreground">{String(copy)}</p>
             </article>
           ))}
