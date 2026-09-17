@@ -24,7 +24,7 @@ const csvFiles = [exportOne, exportTwo, exportThree, exportFour, exportFive];
 const vehicleWords =
   /\b(suv|sedan|saloon|hatchback|coupe|convertible|pickup|pick-up|truck|van|mpv|automobile|vehicle|car|ev|electric|hybrid|limousine|supercar|sports car)\b/i;
 const nonVehicleWords =
-  /\b(tire|tyre|wheel|rim|brake|engine part|piston|filter|trailer|camper|battery|accessor|door|bumper|light|motorcycle|bike)\b/i;
+  /\b(tire|tires|tyre|tyres|wheel|wheels|rim|rims|brake|engine part|piston|filter|trailer|camper|battery|accessor|door|bumper|light|motorcycle|bike|tent|roof top|fender|caravan|cargo truck|pickup truck)\b/i;
 
 function parseCsv(csv: string): AlibabaRow[] {
   const rows: string[][] = [];
