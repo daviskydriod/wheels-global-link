@@ -67,17 +67,25 @@ function VehicleDetail() {
 
   return (
     <>
-      <section className="bg-navy py-6 text-primary-foreground">
-        <div className="container-shell">
-          <Link to="/cars" className="inline-flex items-center gap-2 text-sm">
-            <ArrowLeft /> Back to cars
+      <div className="border-b border-border bg-secondary">
+        <div className="container-shell flex min-h-12 items-center gap-2 overflow-hidden text-xs text-muted-foreground">
+          <Link to="/" className="shrink-0 transition-colors hover:text-primary">
+            Home
           </Link>
+          <span>/</span>
+          <Link to="/cars" className="shrink-0 transition-colors hover:text-primary">
+            Cars
+          </Link>
+          <span>/</span>
+          <span className="truncate font-semibold text-foreground">
+            {vehicle.brand} {vehicle.model}
+          </span>
         </div>
-      </section>
-      <section className="section-pad bg-background">
+      </div>
+      <section className="bg-secondary py-8 sm:py-12">
         <div className="container-shell grid gap-10 lg:grid-cols-[1.15fr_.85fr]">
-          <div>
-            <div className="overflow-hidden border border-border bg-secondary">
+          <div className="min-w-0">
+            <div className="overflow-hidden border border-border bg-background shadow-sm">
               <img
                 src={activeImage}
                 alt={`${vehicle.year} ${vehicle.brand} ${vehicle.model}`}
@@ -87,7 +95,7 @@ function VehicleDetail() {
               />
             </div>
             {gallery.length > 1 && (
-              <div className="mt-4 grid grid-cols-4 gap-3">
+              <div className="mt-4 grid grid-cols-4 gap-3 sm:grid-cols-6">
                 {gallery.map((image) => (
                   <button
                     key={image}
@@ -102,7 +110,7 @@ function VehicleDetail() {
               </div>
             )}
           </div>
-          <div>
+          <div className="border border-border bg-background p-6 shadow-sm sm:p-8">
             <div className="flex flex-wrap items-center gap-3 text-sm font-bold uppercase text-primary">
               <span>{vehicle.brand}</span>
               <span className="text-muted-foreground">{vehicle.year}</span>
@@ -113,13 +121,16 @@ function VehicleDetail() {
             <h1 className="mt-3 text-5xl font-extrabold uppercase leading-none sm:text-6xl">
               {vehicle.model}
             </h1>
-            <p className="mt-6 text-2xl font-bold">{vehicle.price}</p>
+            <div className="mt-6 border-y border-border py-5">
+              <p className="text-xs font-bold uppercase text-muted-foreground">Price</p>
+              <p className="mt-1 text-2xl font-bold">{vehicle.price}</p>
+            </div>
             <p className="mt-6 leading-7 text-muted-foreground">{vehicle.description}</p>
-            <div className="mt-7 flex items-start gap-3 border-y border-border py-4 text-sm">
+            <div className="mt-6 flex items-start gap-3 border-y border-border py-4 text-sm">
               <CheckCircle2 className="mt-0.5 shrink-0 text-primary" />
               <span>{vehicle.availability}. Final details are confirmed during inquiry.</span>
             </div>
-            <div className="mt-7 grid gap-3 sm:grid-cols-2">
+            <div className="mt-6 grid gap-3">
               <Button asChild size="lg">
                 <a href={whatsappUrl(requestMessage)}>Request Information</a>
               </Button>
@@ -139,10 +150,14 @@ function VehicleDetail() {
                 View original supplier listing <ExternalLink className="h-4 w-4" />
               </a>
             )}
+            <p className="mt-6 text-xs leading-5 text-muted-foreground">
+              Development listing. Availability, specification, supplier terms, shipping cost, and
+              final price must be confirmed with AWA AUTO MALL.
+            </p>
           </div>
         </div>
       </section>
-      <section className="section-pad bg-secondary">
+      <section className="border-y border-border bg-background py-10 sm:py-14">
         <div className="container-shell">
           <SectionTitle eyebrow="Vehicle information" title="Specifications At A Glance" />
           <dl className="grid border-l border-t border-border sm:grid-cols-2 lg:grid-cols-5">
