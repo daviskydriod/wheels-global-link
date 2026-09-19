@@ -239,6 +239,18 @@ img {
     padding-bottom: 5.5rem;
   }
 }
+/* Admin uses its own type scale: undo the public-site mobile heading/main overrides above. */
+@media (max-width: 639px) {
+  .admin-app h1,
+  .admin-app h2,
+  .admin-app main {
+    font-size: revert-layer;
+    padding-bottom: revert-layer;
+  }
+  main:has(> .admin-app) {
+    padding-bottom: 0;
+  }
+}
 @media (display-mode: standalone) {
   body {
     padding-bottom: env(safe-area-inset-bottom);
