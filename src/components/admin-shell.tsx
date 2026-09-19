@@ -46,6 +46,7 @@ function AdminLogin({ onAuthenticated }: { onAuthenticated: () => void }) {
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault(); setError("");
     if (!email.trim() || !password) { setError("Enter your admin email and password."); return; }
+    if (!API_BASE_URL || !apiAvailable) { setError("The live API is not connected. Use Continue with demo data, or configure VITE_API_BASE_URL first."); return; }
     setBusy(true);
     try { await adminLogin(email.trim(), password); onAuthenticated(); }
     catch (loginError) { setError(loginError instanceof Error ? loginError.message : "Login failed. Check your details and try again."); }
