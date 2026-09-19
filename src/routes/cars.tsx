@@ -6,10 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { vehicles } from "@/lib/inventory";
 import {
+  API_BASE_URL,
   currencyRates,
   currencySymbols,
   getFavoriteSlugs,
   getVehicleCategory,
+  publicVehicles,
   vehicleMatches,
 } from "@/lib/vehicle-platform";
 import hero from "@/assets/awa-cars-category.jpg";
@@ -37,6 +39,7 @@ function CarsPage() {
   const { q, brand, model, carType, condition, year, page } = Route.useSearch();
   const [currency, setCurrency] = useState("USD");
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [catalogVehicles, setCatalogVehicles] = useState(vehicles);
   const isDetail = useRouterState({
     select: (state) => state.location.pathname.startsWith("/cars/"),
   });
@@ -44,15 +47,16 @@ function CarsPage() {
     setFavorites(getFavoriteSlugs());
     const storedCurrency = localStorage.getItem("awa-currency") ?? "USD";
     setCurrency(storedCurrency in currencySymbols ? storedCurrency : "USD");
+    if (API_BASE_URL) publicVehicles().then((items) => { if (items.length) setCatalogVehicles(items); }).catch(() => undefined);
   }, []);
-  const brands = [...new Set(vehicles.map((v) => v.brand))].sort();
-  const models = [...new Set(vehicles.map((v) => v.model))].sort();
-  const years = [...new Set(vehicles.map((v) => String(v.year)))].sort(
+  const brands = [...new Set(catalogVehicles.map((v) => v.brand))].sort();
+  const models = [...new Set(catalogVehicles.map((v) => v.model))].sort();
+  const years = [...new Set(catalogVehicles.map((v) => String(v.year)))].sort(
     (a, b) => Number(b) - Number(a),
   );
   const shown = useMemo(
     () =>
-      vehicles.filter(
+      catalogVehicles.filter(
         (v) =>
           vehicleMatches(v, q) &&
           (brand === "All" || v.brand === brand) &&
@@ -61,13 +65,13 @@ function CarsPage() {
           (carType === "All" || getVehicleCategory(v) === carType) &&
           (year === "All" || String(v.year) === year),
       ),
-    [q, brand, model, condition, carType, year],
+    [catalogVehicles, q, brand, model, condition, carType, year],
   );
   const updateSearch = (
     key: "q" | "brand" | "model" | "carType" | "condition" | "year",
     value: string,
   ) => navigate({ search: (previous) => ({ ...previous, [key]: value, page: 1 }) });
-  const suggestions = q ? vehicles.filter((vehicle) => vehicleMatches(vehicle, q)).slice(0, 5) : [];
+  const suggestions = q ? catalogVehicles.filter((vehicle) => vehicleMatches(vehicle, q)).slice(0, 5) : [];
   const pageSize = 12;
   const pageCount = Math.max(1, Math.ceil(shown.length / pageSize));
   const currentPage = Math.min(Math.max(page, 1), pageCount);
