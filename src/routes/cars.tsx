@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { vehicles } from "@/lib/inventory";
 import {
+  currencyRates,
   currencySymbols,
   getFavoriteSlugs,
   getVehicleCategory,
@@ -41,7 +42,8 @@ function CarsPage() {
   });
   useEffect(() => {
     setFavorites(getFavoriteSlugs());
-    setCurrency(localStorage.getItem("awa-currency") ?? "USD");
+    const storedCurrency = localStorage.getItem("awa-currency") ?? "USD";
+    setCurrency(storedCurrency in currencySymbols ? storedCurrency : "USD");
   }, []);
   const brands = [...new Set(vehicles.map((v) => v.brand))].sort();
   const models = [...new Set(vehicles.map((v) => v.model))].sort();
@@ -70,6 +72,10 @@ function CarsPage() {
   const pageCount = Math.max(1, Math.ceil(shown.length / pageSize));
   const currentPage = Math.min(Math.max(page, 1), pageCount);
   const visibleVehicles = shown.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const pricedVehicles = visibleVehicles.map((vehicle) => ({
+    ...vehicle,
+    price: formatMarketplacePrice(vehicle.price, currency),
+  }));
   const hasFilters = Boolean(
     q ||
     brand !== "All" ||
@@ -213,7 +219,7 @@ function CarsPage() {
               {hasFilters ? "Matching Vehicles" : "Explore All Vehicles"}
             </h2>
           </div>
-          <VehicleGrid items={visibleVehicles} />
+          <VehicleGrid items={pricedVehicles} />
           <div className="mt-10 flex justify-center gap-6 text-sm font-bold uppercase text-primary">
             {currentPage > 1 && (
               <button
@@ -238,6 +244,27 @@ function CarsPage() {
     </>
   );
 }
+
+function formatMarketplacePrice(price: string, currency: string): string {
+  if (!price || /contact|request|on request/i.test(price)) return price;
+
+  const values = price.match(/\d[\d,]*(?:\.\d+)?/g);
+  if (!values?.length) return price;
+
+  // Inventory fallback prices are stored in GHS. Rates are expressed as units
+  // of each currency per USD, so converting GHS uses targetRate / ghsRate.
+  const ghsRate = currencyRates.GHS ?? 1;
+  const targetRate = currencyRates[currency] ?? 1;
+  const symbol = currencySymbols[currency] ?? currency;
+  const converted = values.map((value) => {
+    const amount = Number(value.replace(/,/g, ""));
+    const result = (amount / ghsRate) * targetRate;
+    return result.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  });
+
+  return `${symbol} ${converted.join(" - ")}`;
+}
+
 function FilterSelect({
   value,
   onChange,
