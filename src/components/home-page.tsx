@@ -163,7 +163,7 @@ function Hero() {
             Your Trusted Source for <span className="text-primary">Cars</span>
           </motion.h1>
           <p className="mt-6 max-w-xl text-base leading-7 text-primary-foreground/75 sm:text-lg">
-            Quality vehicles, sourced in China and supplied globally.
+            Quality vehicles, Sourced in China supply globally.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg">
