@@ -13,8 +13,10 @@ import { Button } from "@/components/ui/button";
 import { getVehicleFallbackImage, vehicles } from "@/lib/inventory";
 import { formatMarketplacePrice, publicVehicleBySlug } from "@/lib/vehicle-platform";
 
-// TODO: replace with the client's WhatsApp number (international format, digits only, no + or spaces)
-const WHATSAPP_NUMBER = "233000000000";
+const WHATSAPP_CONTACTS = [
+  { label: "China", number: "8613026895234" },
+  { label: "Ghana", number: "233592656665" },
+];
 
 export const Route = createFileRoute("/cars/$slug")({
   loader: async ({ params }) => {
@@ -98,7 +100,8 @@ function VehicleDetail() {
     ["Condition", vehicle.condition],
   ];
   const requestMessage = `Hello AWA AUTO MALL, please send me full information about the ${vehicle.year} ${vehicle.brand} ${vehicle.model}.\n\nLink: ${typeof window !== "undefined" ? window.location.href : `/cars/${vehicle.slug}`}`;
-  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(requestMessage)}`;
+  const whatsappUrl = (number: string) =>
+    `https://wa.me/${number}?text=${encodeURIComponent(requestMessage)}`;
 
   return (
     <>
@@ -172,16 +175,18 @@ function VehicleDetail() {
               <span>{vehicle.availability}. Final details are confirmed during inquiry.</span>
             </div>
             <div className="mt-6 grid gap-3">
-              <Button asChild size="lg">
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                  Request Information
-                </a>
-              </Button>
-              <Button asChild variant="automotive" size="lg">
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle /> Send an inquiry on WhatsApp
-                </a>
-              </Button>
+              {WHATSAPP_CONTACTS.map((contact, i) => (
+                <Button
+                  key={contact.number}
+                  asChild
+                  size="lg"
+                  variant={i === 0 ? "default" : "automotive"}
+                >
+                  <a href={whatsappUrl(contact.number)} target="_blank" rel="noopener noreferrer">
+                    <MessageCircle /> WhatsApp {contact.label}
+                  </a>
+                </Button>
+              ))}
             </div>
             <p className="mt-6 text-xs leading-5 text-muted-foreground">
               Availability, specification, shipping cost, and final price must be confirmed with AWA
@@ -236,11 +241,15 @@ function VehicleDetail() {
               Share your destination and budget so the sourcing team can confirm the most practical
               options.
             </p>
-            <Button asChild className="mt-6" size="lg" variant="automotive">
-              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                <MessageCircle /> Send a vehicle brief on WhatsApp
-              </a>
-            </Button>
+            <div className="mt-6 flex flex-wrap gap-3">
+              {WHATSAPP_CONTACTS.map((contact) => (
+                <Button key={contact.number} asChild size="lg" variant="automotive">
+                  <a href={whatsappUrl(contact.number)} target="_blank" rel="noopener noreferrer">
+                    <MessageCircle /> WhatsApp {contact.label}
+                  </a>
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
       </section>
