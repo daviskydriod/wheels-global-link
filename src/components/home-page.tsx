@@ -152,7 +152,7 @@ function Hero() {
             className="mb-5 flex items-center gap-3 text-sm font-bold uppercase"
           >
             <span className="h-0.5 w-10 bg-destructive" />
-            Guangzhou · Global Automotive Sourcing
+            China · Global Automotive Sourcing
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 18 }}
