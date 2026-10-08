@@ -8,12 +8,14 @@ import globalImage from "@/assets/awa-global.jpg";
 import partsImage from "@/assets/awa-parts-category.jpg";
 import { importedVehicles } from "@/lib/alibaba-import";
 
+export type VehicleCondition = "New" | "Used";
+
 export type Vehicle = {
   slug: string;
   brand: string;
   model: string;
   year: number;
-  condition: string;
+  condition: VehicleCondition;
   fuel: string;
   transmission: string;
   driveType?: string;
@@ -29,12 +31,18 @@ export type Vehicle = {
   category?: string;
   source?: string;
 };
+
+// Accepts any source value (e.g. "Pre-owned", "Preowned", "Used", "New")
+type RawVehicle = Omit<Vehicle, "condition"> & { condition: string };
+
+const normalizeCondition = (c: string): VehicleCondition => (/new/i.test(c) ? "New" : "Used");
+
 export function getVehicleFallbackImage(category?: string) {
   if (category === "Truck") return globalImage;
   if (category === "Sedan") return mercedes;
   return category === "SUV" ? landCruiser : lexus;
 }
-const localVehicles: Vehicle[] = [
+const localVehicles: RawVehicle[] = [
   {
     slug: "toyota-land-cruiser",
     brand: "Toyota",
@@ -76,7 +84,7 @@ const localVehicles: Vehicle[] = [
     brand: "Mercedes-Benz",
     model: "E-Class",
     year: 2023,
-    condition: "Pre-owned",
+    condition: "Used",
     fuel: "Petrol",
     transmission: "Automatic",
     price: "GHS 319,682.75",
@@ -94,7 +102,7 @@ const localVehicles: Vehicle[] = [
     brand: "BMW",
     model: "5 Series",
     year: 2023,
-    condition: "Pre-owned",
+    condition: "Used",
     fuel: "Petrol",
     transmission: "Automatic",
     price: "GHS 275,735.42",
@@ -112,7 +120,7 @@ const localVehicles: Vehicle[] = [
     brand: "Range Rover",
     model: "Sport",
     year: 2022,
-    condition: "Pre-owned",
+    condition: "Used",
     fuel: "Petrol",
     transmission: "Automatic",
     price: "GHS 373,727.23-396,768.52",
@@ -143,7 +151,12 @@ const localVehicles: Vehicle[] = [
     source: "Alibaba reference pricing",
   },
 ];
-export const vehicles: Vehicle[] = [...localVehicles, ...importedVehicles];
+
+// Every vehicle, local or imported, ends up as "New" or "Used"
+export const vehicles: Vehicle[] = [
+  ...localVehicles,
+  ...(importedVehicles as RawVehicle[]),
+].map((v) => ({ ...v, condition: normalizeCondition(v.condition) }));
 
 // Kept for the planned future spare-parts upgrade; no public route or navigation links use this data.
 export type Part = {
