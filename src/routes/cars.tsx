@@ -15,6 +15,9 @@ import {
 } from "@/lib/vehicle-platform";
 import hero from "@/assets/awa-cars-category.jpg";
 
+// Maps any source value ("Pre-owned", "Preowned", "Used", "New") to "New" | "Used"
+const normalizeCondition = (c: string) => (/new/i.test(c) ? "New" : "Used");
+
 export const Route = createFileRoute("/cars")({
   validateSearch: (search) => ({
     q: typeof search.q === "string" ? search.q : "",
@@ -77,7 +80,7 @@ function CarsPage() {
           vehicleMatches(v, q) &&
           (brand === "All" || v.brand === brand) &&
           (model === "All" || v.model === model) &&
-          (condition === "All" || v.condition === condition) &&
+          (condition === "All" || normalizeCondition(v.condition) === condition) &&
           (carType === "All" || getVehicleCategory(v) === carType) &&
           (year === "All" || String(v.year) === year),
       ),
@@ -96,6 +99,7 @@ function CarsPage() {
   const visibleVehicles = shown.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   const pricedVehicles = visibleVehicles.map((vehicle) => ({
     ...vehicle,
+    condition: normalizeCondition(vehicle.condition),
     price: formatMarketplacePrice(vehicle.price, currency),
   }));
   const hasFilters = Boolean(
@@ -208,7 +212,7 @@ function CarsPage() {
                 value={condition}
                 onChange={(v) => updateSearch("condition", v)}
                 label="Condition"
-                options={["New", "Pre-owned"]}
+                options={["New", "Used"]}
               />
               <span className="text-xs text-muted-foreground">
                 {shown.length} vehicle{shown.length === 1 ? "" : "s"} match your search
