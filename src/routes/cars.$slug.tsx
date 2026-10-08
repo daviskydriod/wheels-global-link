@@ -99,7 +99,27 @@ function VehicleDetail() {
     ["Color", vehicle.color],
     ["Condition", vehicle.condition],
   ];
-  const requestMessage = `Hello AWA AUTO MALL, please send me full information about the ${vehicle.year} ${vehicle.brand} ${vehicle.model}.\n\nLink: ${typeof window !== "undefined" ? window.location.href : `/cars/${vehicle.slug}`}`;
+  const pageUrl =
+    typeof window !== "undefined" ? window.location.href : `/cars/${vehicle.slug}`;
+  const detailLines = [
+    ["Vehicle", `${vehicle.year} ${vehicle.brand} ${vehicle.model}`],
+    ["Condition", vehicle.condition],
+    ["Category", vehicle.category],
+    ["Price", formatMarketplacePrice(vehicle.price, currency)],
+    ["Mileage", vehicle.mileage],
+    ["Fuel", vehicle.fuel],
+    ["Transmission", vehicle.transmission],
+    ["Drive type", vehicle.driveType],
+    ["Engine", vehicle.engine],
+    ["Color", vehicle.color],
+    ["Availability", vehicle.availability],
+    ["Reference", vehicle.slug],
+  ]
+    .filter(([, value]) => value)
+    .map(([label, value]) => `• ${label}: ${value}`)
+    .join("\n");
+  const imageLine = /^https?:\/\//.test(vehicle.image) ? `\nPhoto: ${vehicle.image}` : "";
+  const requestMessage = `Hello AWA AUTO MALL, I'm interested in this vehicle and would like full information, final price, shipping cost and inspection details.\n\n*VEHICLE DETAILS*\n${detailLines}\n\nPage: ${pageUrl}${imageLine}\n\nMy destination country/port: \nMy budget: `;
   const whatsappUrl = (number: string) =>
     `https://wa.me/${number}?text=${encodeURIComponent(requestMessage)}`;
 
