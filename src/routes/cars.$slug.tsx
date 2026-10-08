@@ -13,6 +13,9 @@ import { Button } from "@/components/ui/button";
 import { getVehicleFallbackImage, vehicles } from "@/lib/inventory";
 import { formatMarketplacePrice, publicVehicleBySlug } from "@/lib/vehicle-platform";
 
+// TODO: replace with the client's WhatsApp number (international format, digits only, no + or spaces)
+const WHATSAPP_NUMBER = "233000000000";
+
 export const Route = createFileRoute("/cars/$slug")({
   loader: async ({ params }) => {
     let vehicle = null;
@@ -94,7 +97,8 @@ function VehicleDetail() {
     ["Color", vehicle.color],
     ["Condition", vehicle.condition],
   ];
-  const requestMessage = `Hello AWA AUTO MALL, please send me full information about the ${vehicle.year} ${vehicle.brand} ${vehicle.model}.`;
+  const requestMessage = `Hello AWA AUTO MALL, please send me full information about the ${vehicle.year} ${vehicle.brand} ${vehicle.model}.\n\nLink: ${typeof window !== "undefined" ? window.location.href : `/cars/${vehicle.slug}`}`;
+  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(requestMessage)}`;
 
   return (
     <>
@@ -169,20 +173,14 @@ function VehicleDetail() {
             </div>
             <div className="mt-6 grid gap-3">
               <Button asChild size="lg">
-                <Link
-                  to="/request-vehicle"
-                  search={{ vehicle: `${vehicle.year} ${vehicle.brand} ${vehicle.model}` }}
-                >
+                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
                   Request Information
-                </Link>
+                </a>
               </Button>
               <Button asChild variant="automotive" size="lg">
-                <Link
-                  to="/request-vehicle"
-                  search={{ vehicle: `${vehicle.year} ${vehicle.brand} ${vehicle.model}` }}
-                >
-                  <MessageCircle /> Send an inquiry
-                </Link>
+                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle /> Send an inquiry on WhatsApp
+                </a>
               </Button>
             </div>
             <p className="mt-6 text-xs leading-5 text-muted-foreground">
@@ -239,12 +237,9 @@ function VehicleDetail() {
               options.
             </p>
             <Button asChild className="mt-6" size="lg" variant="automotive">
-              <Link
-                to="/request-vehicle"
-                search={{ vehicle: `${vehicle.year} ${vehicle.brand} ${vehicle.model}` }}
-              >
-                Send a vehicle brief
-              </Link>
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                <MessageCircle /> Send a vehicle brief on WhatsApp
+              </a>
             </Button>
           </div>
         </div>
