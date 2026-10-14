@@ -41,6 +41,7 @@ export function HomePage({ catalog, articles }: { catalog: Vehicle[]; articles: 
   return (
     <>
       <Hero />
+      <VideoShowcase />
       <SearchSection items={catalog} />
       <BrowseByCategory />
       <motion.section {...reveal} className="section-pad bg-secondary">
@@ -110,6 +111,41 @@ export function HomePage({ catalog, articles }: { catalog: Vehicle[]; articles: 
         </div>
       </section>
     </>
+  );
+}
+
+function VideoShowcase() {
+  const videos = ["/videos/awa-showcase-1.mp4", "/videos/awa-showcase-2.mp4"];
+
+  return (
+    <motion.section {...reveal} className="section-pad bg-background">
+      <div className="container-shell">
+        <SectionHeading
+          eyebrow="A closer look"
+          title="See AWA In Action"
+          copy="Explore the AWA AUTO MALL experience through our latest videos."
+        />
+        <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2 sm:gap-8">
+          {videos.map((src, index) => (
+            <div
+              key={src}
+              className="mx-auto w-full max-w-sm overflow-hidden rounded-lg bg-navy shadow-lg"
+            >
+              <video
+                className="aspect-[9/16] w-full bg-navy object-contain"
+                controls
+                playsInline
+                preload="metadata"
+                aria-label={`AWA AUTO MALL showcase video ${index + 1}`}
+              >
+                <source src={src} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          ))}
+        </div>
+      </div>
+    </motion.section>
   );
 }
 
