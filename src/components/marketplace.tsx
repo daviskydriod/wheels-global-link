@@ -3,7 +3,7 @@ import { ArrowRight, Check, Fuel, Gauge, GitCompareArrows, Settings2, X } from "
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { getVehicleFallbackImage, type Part, type Vehicle } from "@/lib/inventory";
-import { trackAnalytics } from "@/lib/vehicle-platform";
+import { formatMarketplacePrice, trackAnalytics } from "@/lib/vehicle-platform";
 
 type CompareContextValue = {
   selected: string[];
@@ -78,9 +78,20 @@ export function SectionHeading({
   );
 }
 
-export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
+export function VehicleCard({
+  vehicle,
+  currency = "USD",
+  priceIsFormatted = false,
+}: {
+  vehicle: Vehicle;
+  currency?: string;
+  priceIsFormatted?: boolean;
+}) {
   const { selected, toggle } = useCompare();
   const isSelected = selected.includes(vehicle.slug);
+  const displayPrice = priceIsFormatted
+    ? vehicle.price
+    : formatMarketplacePrice(vehicle.price, currency);
   return (
     <article className="group overflow-hidden border border-border bg-card">
       <Link
@@ -125,7 +136,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
           </span>
         </div>
         <div className="flex items-center justify-between gap-3">
-          <strong>{vehicle.price}</strong>
+          <strong>{displayPrice}</strong>
         </div>
         <div className="mt-5 grid gap-2 sm:grid-cols-2">
           <Button asChild variant="outline">
@@ -147,11 +158,24 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
     </article>
   );
 }
-export function VehicleGrid({ items }: { items: Vehicle[] }) {
+export function VehicleGrid({
+  items,
+  currency = "USD",
+  pricesAreFormatted = false,
+}: {
+  items: Vehicle[];
+  currency?: string;
+  pricesAreFormatted?: boolean;
+}) {
   return (
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
       {items.map((v) => (
-        <VehicleCard key={v.slug} vehicle={v} />
+        <VehicleCard
+          key={v.slug}
+          vehicle={v}
+          currency={currency}
+          priceIsFormatted={pricesAreFormatted}
+        />
       ))}
     </div>
   );

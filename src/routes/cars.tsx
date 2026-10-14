@@ -278,7 +278,7 @@ function CarsPage() {
                 </div>
               ) : (
                 <>
-                  <VehicleGrid items={pricedVehicles} />
+                  <VehicleGrid items={pricedVehicles} pricesAreFormatted />
                   <div className="mt-10 flex justify-center gap-6 text-sm font-bold uppercase text-primary">
                     {currentPage > 1 && (
                       <button
