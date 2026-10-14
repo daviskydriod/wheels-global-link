@@ -17,7 +17,8 @@ Spare-parts screens and backend support are retained for the planned follow-on p
 
 - React and TypeScript
 - TanStack Router
-- React and Vite build output in `dist/`
+- Next.js App Router with server-rendered SEO metadata and route introductions
+- Existing TanStack Router marketplace mounted as a client interaction layer
 - Tailwind CSS and shadcn-style UI components
 - PWA manifest and service worker
 - PHP 8.1+/MySQL API deployed separately on cPanel or compatible hosting
@@ -76,14 +77,15 @@ The request-vehicle form uses `POST /inquiries` with `type: "vehicle_request"`. 
 
 ## Deployment checklist
 
-1. Deploy the frontend with `npm run build`; Vercel serves the generated `dist/` directory.
-2. Keep the Vercel project framework set to Vite and retain the committed `vercel.json` SPA fallback so direct visits to routes such as `/cars` and `/news` resolve to the React app instead of returning a domain error.
-3. Configure `VITE_API_BASE_URL` for the production API.
-4. Configure the API `CORS_ORIGIN` to the exact production frontend origin.
-5. Confirm DNS and HTTPS for `awaautos.com` and any approved `www` redirect.
-6. Confirm `GET https://api.awaautos.com/api/health` from the production domain.
-7. Test catalog, vehicle detail, news, inquiry, analytics, admin login, and order tracking against real data.
-8. Verify the robots file, canonical metadata, social previews, PWA installation, and mobile navigation.
+1. Deploy the frontend with `npm run build`; Vercel should use the Next.js framework preset and the committed `vercel.json`.
+2. Configure `NEXT_PUBLIC_API_BASE_URL` (or retain `VITE_API_BASE_URL` during the transition) for the production API.
+3. Configure the API `CORS_ORIGIN` to the exact production frontend origin.
+4. Confirm DNS and HTTPS for `awaautos.com` and any approved `www` redirect.
+5. Confirm `GET https://api.awaautos.com/api/health` from the production domain.
+6. Test catalog, vehicle detail, news, inquiry, analytics, admin login, and order tracking against real data.
+7. Verify server-rendered titles, descriptions, canonical URLs, Open Graph metadata, sitemap, robots file, PWA installation, and mobile navigation.
+
+Public route metadata and a descriptive heading are rendered by Next.js on the server. The existing interactive marketplace mounts after hydration so the current filters, forms, admin tools, and TanStack Router behavior remain available.
 
 ## Timeline status
 
