@@ -22,7 +22,9 @@ export const Route = createFileRoute("/spare-parts/$slug")({
         { property: "og:type", content: "product" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
-      links: p ? [{ rel: "canonical", href: `/spare-parts/${p.slug}` }] : [],
+      links: p
+        ? [{ rel: "canonical", href: `https://www.awaautos.com/spare-parts/${p.slug}` }]
+        : [],
     };
   },
   component: PartDetail,

@@ -72,7 +72,9 @@ export const Route = createFileRoute("/cars/$slug")({
         { property: "og:type", content: "product" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
-      links: vehicle ? [{ rel: "canonical", href: `/cars/${vehicle.slug}` }] : [],
+      links: vehicle
+        ? [{ rel: "canonical", href: `https://www.awaautos.com/cars/${vehicle.slug}` }]
+        : [],
     };
   },
   component: VehicleDetail,
