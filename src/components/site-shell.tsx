@@ -96,19 +96,21 @@ export function MobileAppNav() {
   return (
     <nav
       aria-label="Mobile app navigation"
-      className="site-mobile-nav fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-border/80 bg-background/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-10px_30px_rgba(15,23,42,.10)] backdrop-blur-xl lg:hidden"
+      className="site-mobile-nav fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-10px_30px_rgba(15,23,42,.10)] backdrop-blur-xl lg:hidden"
     >
-      {items.map(({ to, label, icon: Icon }) => (
-        <Link
-          key={to}
-          to={to}
-          activeOptions={{ exact: to === "/" }}
-          className="flex min-h-16 flex-col items-center justify-center gap-1 text-[10px] font-bold text-muted-foreground transition-colors data-[status=active]:text-primary"
-        >
-          <Icon className="h-5 w-5" />
-          {label}
-        </Link>
-      ))}
+      <div className="mx-auto grid max-w-md grid-cols-4">
+        {items.map(({ to, label, icon: Icon }) => (
+          <Link
+            key={to}
+            to={to}
+            activeOptions={{ exact: to === "/" }}
+            className="flex min-h-16 min-w-0 flex-col items-center justify-center gap-1 px-2 text-center text-[10px] font-bold text-muted-foreground transition-colors data-[status=active]:text-primary"
+          >
+            <Icon className="h-5 w-5" />
+            <span className="truncate">{label}</span>
+          </Link>
+        ))}
+      </div>
     </nav>
   );
 }

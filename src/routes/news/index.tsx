@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { NewsCard, NewsGrid, type NewsArticle } from "@/components/news";
 import { PageIntro, SectionHeading } from "@/components/marketplace";
 import { localArticles } from "@/lib/news";
@@ -7,6 +6,14 @@ import { publicNews } from "@/lib/vehicle-platform";
 import image from "@/assets/awa-global.jpg";
 
 export const Route = createFileRoute("/news/")({
+  loader: async () => {
+    try {
+      const data = await publicNews();
+      return { articles: Array.isArray(data) && data.length ? data : localArticles };
+    } catch {
+      return { articles: localArticles };
+    }
+  },
   head: () => ({
     meta: [
       { title: "News | AWA AUTO MALL" },
@@ -20,17 +27,7 @@ export const Route = createFileRoute("/news/")({
 });
 
 function NewsPage() {
-  const [articles, setArticles] = useState<NewsArticle[]>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    publicNews()
-      .then((data) => {
-        const incoming = Array.isArray(data) ? data : [];
-        setArticles(incoming.length ? incoming : localArticles);
-      })
-      .catch(() => setArticles(localArticles))
-      .finally(() => setLoading(false));
-  }, []);
+  const { articles } = Route.useLoaderData() as { articles: NewsArticle[] };
   return (
     <>
       <PageIntro
@@ -42,9 +39,7 @@ function NewsPage() {
       <section className="section-pad">
         <div className="container-shell">
           <SectionHeading eyebrow="Latest news" title="What We Are Learning" />
-          {loading ? (
-            <p className="py-16 text-center text-muted-foreground">Loading latest news...</p>
-          ) : articles.length ? (
+          {articles.length && articles[0] ? (
             <div>
               <div className="grid gap-10 lg:grid-cols-[1.5fr_.8fr]">
                 <NewsCard article={articles[0]} />

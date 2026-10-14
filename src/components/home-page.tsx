@@ -10,7 +10,7 @@ import {
   ShieldCheck,
   Wrench,
 } from "lucide-react";
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +23,7 @@ import type { Vehicle } from "@/lib/inventory";
 import { ContactStrip } from "./site-shell";
 import { SectionHeading, VehicleGrid } from "./marketplace";
 import { NewsGrid, type NewsArticle } from "./news";
-import { API_BASE_URL, publicNews, publicVehicles, submitInquiry } from "@/lib/vehicle-platform";
+import { API_BASE_URL, submitInquiry } from "@/lib/vehicle-platform";
 
 const reveal = {
   initial: { opacity: 0, y: 24 },
@@ -32,31 +32,7 @@ const reveal = {
   transition: { duration: 0.55 },
 };
 
-export function HomePage() {
-  const [catalog, setCatalog] = useState<Vehicle[]>([]);
-  const [articles, setArticles] = useState<NewsArticle[]>([]);
-
-  useEffect(() => {
-    let active = true;
-    void Promise.allSettled([publicVehicles(), publicNews()]).then(
-      ([vehicleResult, newsResult]) => {
-        if (!active) return;
-        setCatalog(vehicleResult.status === "fulfilled" ? vehicleResult.value : []);
-        setArticles(
-          newsResult.status === "fulfilled" && Array.isArray(newsResult.value)
-            ? newsResult.value.map((article) => ({
-                ...article,
-                cover_image: article.cover_image ?? undefined,
-              }))
-            : [],
-        );
-      },
-    );
-    return () => {
-      active = false;
-    };
-  }, []);
-
+export function HomePage({ catalog, articles }: { catalog: Vehicle[]; articles: NewsArticle[] }) {
   return (
     <>
       <Hero />
