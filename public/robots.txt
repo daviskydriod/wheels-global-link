@@ -18,4 +18,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://awaautos.com/sitemap.xml
+Sitemap: https://www.awaautos.com/sitemap.xml
