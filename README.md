@@ -17,7 +17,7 @@ Spare-parts screens and backend support are retained for the planned follow-on p
 
 - React and TypeScript
 - TanStack Router
-- Vite/Nitro build and deployment output
+- TanStack Start prerendered Vite/Nitro deployment output
 - Tailwind CSS and shadcn-style UI components
 - PWA manifest and service worker
 - PHP 8.1+/MySQL API deployed separately on cPanel or compatible hosting
@@ -76,13 +76,14 @@ The request-vehicle form uses `POST /inquiries` with `type: "vehicle_request"`. 
 
 ## Deployment checklist
 
-1. Deploy the frontend build to the approved Vercel/hosting project.
-2. Configure `VITE_API_BASE_URL` for the production API.
-3. Configure the API `CORS_ORIGIN` to the exact production frontend origin.
-4. Confirm DNS and HTTPS for `awaautos.com` and any approved `www` redirect.
-5. Confirm `GET https://api.awaautos.com/api/health` from the production domain.
-6. Test catalog, vehicle detail, news, inquiry, analytics, admin login, and order tracking against real data.
-7. Verify the sitemap, robots file, canonical metadata, social previews, PWA installation, and mobile navigation.
+1. Deploy the frontend with `npm run build`; Vercel serves `.vercel/output`, including prerendered route HTML.
+2. Keep the committed `vercel.json` output directory unchanged. Do not replace it with `dist` or add a catch-all SPA rewrite, because that would bypass the prerendered SEO pages.
+3. Configure `VITE_API_BASE_URL` for the production API.
+4. Configure the API `CORS_ORIGIN` to the exact production frontend origin.
+5. Confirm DNS and HTTPS for `awaautos.com` and any approved `www` redirect.
+6. Confirm `GET https://api.awaautos.com/api/health` from the production domain.
+7. Test catalog, vehicle detail, news, inquiry, analytics, admin login, and order tracking against real data.
+8. Verify the generated sitemap, robots file, canonical metadata, social previews, PWA installation, and mobile navigation.
 
 ## Timeline status
 
