@@ -1,11 +1,20 @@
-import landCruiser from "@/assets/car-land-cruiser.jpg";
-import lexus from "@/assets/car-lexus-rx.jpg";
-import mercedes from "@/assets/car-mercedes-e.jpg";
-import bmw from "@/assets/car-bmw-5.jpg";
-import rangeRover from "@/assets/car-range-rover.jpg";
-import hyundai from "@/assets/car-hyundai.jpg";
-import globalImage from "@/assets/awa-global.jpg";
-import partsImage from "@/assets/awa-parts-category.jpg";
+import { assetUrl } from "@/lib/asset-url";
+import landCruiserAsset from "@/assets/car-land-cruiser.jpg";
+const landCruiser = assetUrl(landCruiserAsset);
+import lexusAsset from "@/assets/car-lexus-rx.jpg";
+const lexus = assetUrl(lexusAsset);
+import mercedesAsset from "@/assets/car-mercedes-e.jpg";
+const mercedes = assetUrl(mercedesAsset);
+import bmwAsset from "@/assets/car-bmw-5.jpg";
+const bmw = assetUrl(bmwAsset);
+import rangeRoverAsset from "@/assets/car-range-rover.jpg";
+const rangeRover = assetUrl(rangeRoverAsset);
+import hyundaiAsset from "@/assets/car-hyundai.jpg";
+const hyundai = assetUrl(hyundaiAsset);
+import globalImageAsset from "@/assets/awa-global.jpg";
+const globalImage = assetUrl(globalImageAsset);
+import partsImageAsset from "@/assets/awa-parts-category.jpg";
+const partsImage = assetUrl(partsImageAsset);
 import { importedVehicles } from "@/lib/alibaba-import";
 
 export type VehicleCondition = "New" | "Used";
@@ -153,10 +162,9 @@ const localVehicles: RawVehicle[] = [
 ];
 
 // Every vehicle, local or imported, ends up as "New" or "Used"
-export const vehicles: Vehicle[] = [
-  ...localVehicles,
-  ...(importedVehicles as RawVehicle[]),
-].map((v) => ({ ...v, condition: normalizeCondition(v.condition) }));
+export const vehicles: Vehicle[] = [...localVehicles, ...(importedVehicles as RawVehicle[])].map(
+  (v) => ({ ...v, condition: normalizeCondition(v.condition) }),
+);
 
 // Kept for the planned future spare-parts upgrade; no public route or navigation links use this data.
 export type Part = {

@@ -1,3 +1,4 @@
+import { assetUrl } from "@/lib/asset-url";
 import { Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -15,10 +16,14 @@ import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import hero from "@/assets/awa-hero.jpg";
-import carsCategory from "@/assets/awa-cars-category.jpg";
-import showroom from "@/assets/awa-showroom.jpg";
-import globalImage from "@/assets/awa-global.jpg";
+import heroAsset from "@/assets/awa-hero.jpg";
+const hero = assetUrl(heroAsset);
+import carsCategoryAsset from "@/assets/awa-cars-category.jpg";
+const carsCategory = assetUrl(carsCategoryAsset);
+import showroomAsset from "@/assets/awa-showroom.jpg";
+const showroom = assetUrl(showroomAsset);
+import globalImageAsset from "@/assets/awa-global.jpg";
+const globalImage = assetUrl(globalImageAsset);
 import type { Vehicle } from "@/lib/inventory";
 import { ContactStrip } from "./site-shell";
 import { SectionHeading, VehicleGrid } from "./marketplace";

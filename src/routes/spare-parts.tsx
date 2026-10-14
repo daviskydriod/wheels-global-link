@@ -1,9 +1,11 @@
+import { assetUrl } from "@/lib/asset-url";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { PageIntro, PartsGrid, SectionHeading } from "@/components/marketplace";
 import { Input } from "@/components/ui/input";
 import { partCategories, parts } from "@/lib/inventory";
-import image from "@/assets/awa-parts-category.jpg";
+import imageAsset from "@/assets/awa-parts-category.jpg";
+const image = assetUrl(imageAsset);
 
 export const Route = createFileRoute("/spare-parts")({
   head: () => ({

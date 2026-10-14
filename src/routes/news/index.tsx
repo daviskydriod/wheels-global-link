@@ -1,9 +1,11 @@
+import { assetUrl } from "@/lib/asset-url";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { NewsCard, NewsGrid, type NewsArticle } from "@/components/news";
 import { PageIntro, SectionHeading } from "@/components/marketplace";
 import { localArticles } from "@/lib/news";
 import { publicNews } from "@/lib/vehicle-platform";
-import image from "@/assets/awa-global.jpg";
+import imageAsset from "@/assets/awa-global.jpg";
+const image = assetUrl(imageAsset);
 
 export const Route = createFileRoute("/news/")({
   loader: async () => {

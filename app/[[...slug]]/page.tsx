@@ -53,7 +53,45 @@ const routeCopy: Record<string, { title: string; description: string; heading: s
       "Contact AWA AUTO MALL about vehicle sourcing, inspection, pricing, and worldwide delivery.",
     heading: "Talk to our vehicle sourcing team",
   },
+  "why-awa": {
+    title: "Why Choose AWA AUTO MALL",
+    description:
+      "See how AWA AUTO MALL supports international buyers with vehicle sourcing, verification, and delivery.",
+    heading: "A clearer way to source vehicles internationally",
+  },
+  "request-vehicle": {
+    title: "Request a Vehicle from China",
+    description:
+      "Send AWA AUTO MALL your vehicle brief and receive sourcing support for cars from China.",
+    heading: "Tell us which vehicle you want to source",
+  },
+  "spare-parts": {
+    title: "Automotive Spare Parts from China",
+    description:
+      "Request compatible automotive spare parts from China with AWA AUTO MALL sourcing support.",
+    heading: "Source compatible automotive spare parts",
+  },
+  "track-order": {
+    title: "Track Your AWA AUTO MALL Order",
+    description: "Check the status of an AWA AUTO MALL vehicle sourcing or delivery order.",
+    heading: "Track your vehicle sourcing order",
+  },
+  compare: {
+    title: "Compare Vehicles from China",
+    description:
+      "Compare export-ready vehicles sourced from China before contacting AWA AUTO MALL.",
+    heading: "Compare your vehicle options",
+  },
+  favorites: {
+    title: "Saved Vehicles | AWA AUTO MALL",
+    description: "Review vehicles you saved while browsing AWA AUTO MALL.",
+    heading: "Your saved vehicles",
+  },
 };
+
+export function generateStaticParams() {
+  return [...publicRoutes].filter(Boolean).map((route) => ({ slug: [route] }));
+}
 
 function routeKey(slug: string[] | undefined) {
   return slug?.[0] ?? "";
@@ -91,7 +129,6 @@ export default async function CatchAllPage({ params }: { params: Promise<{ slug?
       <section className="sr-only" aria-label="Page introduction">
         <h1>{copy.heading}</h1>
         <p>{copy.description}</p>
-        <link rel="canonical" href={`https://www.awaautos.com${pathname}`} />
       </section>
       <ClientMarketplace pathname={pathname} />
     </>

@@ -1,3 +1,4 @@
+import { assetUrl } from "@/lib/asset-url";
 import { useEffect, useState } from "react";
 import {
   Check,
@@ -10,7 +11,8 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logo from "@/assets/awa-logo.png";
+import logoAsset from "@/assets/awa-logo.png";
+const logo = assetUrl(logoAsset);
 
 type InstallPromptEvent = Event & {
   prompt: () => Promise<void>;

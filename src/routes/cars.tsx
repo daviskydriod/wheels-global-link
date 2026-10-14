@@ -1,3 +1,4 @@
+import { assetUrl } from "@/lib/asset-url";
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Search, SlidersHorizontal } from "lucide-react";
@@ -13,7 +14,8 @@ import {
   publicVehicles,
   vehicleMatches,
 } from "@/lib/vehicle-platform";
-import hero from "@/assets/awa-cars-category.jpg";
+import heroAsset from "@/assets/awa-cars-category.jpg";
+const hero = assetUrl(heroAsset);
 
 // Maps any source value ("Pre-owned", "Preowned", "Used", "New") to "New" | "Used"
 const normalizeCondition = (c: string) => (/new/i.test(c) ? "New" : "Used");

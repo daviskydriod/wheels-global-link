@@ -1,3 +1,4 @@
+import { assetUrl } from "@/lib/asset-url";
 import { createFileRoute } from "@tanstack/react-router";
 import { FormEvent, useState } from "react";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
@@ -6,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { PageIntro, SectionHeading } from "@/components/marketplace";
 import { API_BASE_URL, submitInquiry } from "@/lib/vehicle-platform";
-import image from "@/assets/awa-global.jpg";
+import imageAsset from "@/assets/awa-global.jpg";
+const image = assetUrl(imageAsset);
 export const Route = createFileRoute("/request-vehicle")({
   validateSearch: (search) => ({
     vehicle: typeof search.vehicle === "string" ? search.vehicle : "",

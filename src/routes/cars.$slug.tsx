@@ -99,8 +99,7 @@ function VehicleDetail() {
     ["Color", vehicle.color],
     ["Condition", vehicle.condition],
   ];
-  const pageUrl =
-    typeof window !== "undefined" ? window.location.href : `/cars/${vehicle.slug}`;
+  const pageUrl = typeof window !== "undefined" ? window.location.href : `/cars/${vehicle.slug}`;
   const detailLines = [
     ["Vehicle", `${vehicle.year} ${vehicle.brand} ${vehicle.model}`],
     ["Condition", vehicle.condition],

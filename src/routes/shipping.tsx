@@ -1,8 +1,10 @@
+import { assetUrl } from "@/lib/asset-url";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2, Clock3, Globe2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageIntro, SectionHeading } from "@/components/marketplace";
-import image from "@/assets/awa-global.jpg";
+import imageAsset from "@/assets/awa-global.jpg";
+const image = assetUrl(imageAsset);
 
 export const Route = createFileRoute("/shipping")({
   head: () => ({
