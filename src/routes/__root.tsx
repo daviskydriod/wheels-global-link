@@ -6,8 +6,10 @@ import {
   useRouter,
   useRouterState,
   HeadContent,
+  Scripts,
 } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
+import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { trackAnalytics } from "../lib/vehicle-platform";
 import { CompareProvider, CompareTray } from "../components/marketplace";
@@ -37,7 +39,7 @@ function NotFoundComponent() {
     </div>
   );
 }
-function ErrorComponent({ error, reset }: { error: unknown; reset: () => void }) {
+function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -85,6 +87,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "theme-color", content: "#ffffff" },
     ],
     links: [
+      { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -96,10 +99,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "manifest", href: "/manifest.webmanifest" },
     ],
   }),
+  shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });
+function RootShell({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <Scripts />
+      </body>
+    </html>
+  );
+}
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (state) => state.location.pathname });
@@ -108,23 +125,20 @@ function RootComponent() {
     if (!isAdmin) trackAnalytics("page_view", undefined, undefined, { path: pathname });
   }, [isAdmin, pathname]);
   return (
-    <>
-      <HeadContent />
-      <QueryClientProvider client={queryClient}>
-        <CompareProvider>
-          {!isAdmin && <SiteHeader />}
-          <main className={isAdmin ? "min-h-screen" : undefined}>
-            <Outlet />
-          </main>
-          {!isAdmin && <SiteFooter />}
-          {!isAdmin && <WhatsAppFloat />}
-          {!isAdmin && <CompareTray />}
-          {!isAdmin && <AIChatWidget />}
-          {!isAdmin && <MobileAppNav />}
-          <PwaRuntime />
-          <AppLoadingScreen />
-        </CompareProvider>
-      </QueryClientProvider>
-    </>
+    <QueryClientProvider client={queryClient}>
+      <CompareProvider>
+        {!isAdmin && <SiteHeader />}
+        <main className={isAdmin ? "min-h-screen" : undefined}>
+          <Outlet />
+        </main>
+        {!isAdmin && <SiteFooter />}
+        {!isAdmin && <WhatsAppFloat />}
+        {!isAdmin && <CompareTray />}
+        {!isAdmin && <AIChatWidget />}
+        {!isAdmin && <MobileAppNav />}
+        <PwaRuntime />
+        <AppLoadingScreen />
+      </CompareProvider>
+    </QueryClientProvider>
   );
 }
