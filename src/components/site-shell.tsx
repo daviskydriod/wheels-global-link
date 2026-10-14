@@ -1,8 +1,10 @@
+import { assetUrl } from "@/lib/asset-url";
 import { Link } from "@tanstack/react-router";
 import { CarFront, Home, MapPin, Menu, MessageCircle, Phone, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import logo from "@/assets/awa-logo.png";
+import logoAsset from "@/assets/awa-logo.png";
+const logo = assetUrl(logoAsset);
 
 const nav = [
   { to: "/", label: "Home" },

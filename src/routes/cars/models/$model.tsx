@@ -1,8 +1,10 @@
+import { assetUrl } from "@/lib/asset-url";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, ChevronRight } from "lucide-react";
 import { SectionHeading, VehicleGrid } from "@/components/marketplace";
 import { getVehicleFallbackImage, vehicles } from "@/lib/inventory";
-import hero from "@/assets/awa-showroom.jpg";
+import heroAsset from "@/assets/awa-showroom.jpg";
+const hero = assetUrl(heroAsset);
 
 function slugify(value: string) {
   return value

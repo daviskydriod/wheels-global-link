@@ -1,9 +1,12 @@
+import { assetUrl } from "@/lib/asset-url";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2, Globe2, Search, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageIntro, SectionHeading } from "@/components/marketplace";
-import guangzhou from "@/assets/awa-global.jpg";
-import showroom from "@/assets/awa-showroom.jpg";
+import guangzhouAsset from "@/assets/awa-global.jpg";
+const guangzhou = assetUrl(guangzhouAsset);
+import showroomAsset from "@/assets/awa-showroom.jpg";
+const showroom = assetUrl(showroomAsset);
 
 export const Route = createFileRoute("/about")({
   head: () => ({

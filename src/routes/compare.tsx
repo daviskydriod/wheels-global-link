@@ -1,3 +1,4 @@
+import { assetUrl } from "@/lib/asset-url";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowLeft,
@@ -18,7 +19,8 @@ import {
   comparisonGroups,
   getComparisonHighlights,
 } from "@/lib/vehicle-comparison";
-import image from "@/assets/awa-cars-category.jpg";
+import imageAsset from "@/assets/awa-cars-category.jpg";
+const image = assetUrl(imageAsset);
 
 export const Route = createFileRoute("/compare")({
   validateSearch: (search) => ({ ids: typeof search.ids === "string" ? search.ids : "" }),

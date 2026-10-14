@@ -1,10 +1,14 @@
+import { assetUrl } from "@/lib/asset-url";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { PageIntro, SectionHeading, VehicleGrid } from "@/components/marketplace";
 import { vehicles } from "@/lib/inventory";
-import hero from "@/assets/awa-cars-category.jpg";
-import globalImage from "@/assets/awa-global.jpg";
-import showroom from "@/assets/awa-showroom.jpg";
+import heroAsset from "@/assets/awa-cars-category.jpg";
+const hero = assetUrl(heroAsset);
+import globalImageAsset from "@/assets/awa-global.jpg";
+const globalImage = assetUrl(globalImageAsset);
+import showroomAsset from "@/assets/awa-showroom.jpg";
+const showroom = assetUrl(showroomAsset);
 
 const vehicleTypes = [
   {

@@ -1,8 +1,10 @@
+import { assetUrl } from "@/lib/asset-url";
 import { createFileRoute } from "@tanstack/react-router";
 import { ContactStrip } from "@/components/site-shell";
 import { InquirySection } from "@/components/home-page";
 import { PageIntro, SectionHeading } from "@/components/marketplace";
-import image from "@/assets/awa-global.jpg";
+import imageAsset from "@/assets/awa-global.jpg";
+const image = assetUrl(imageAsset);
 
 export const Route = createFileRoute("/contact")({
   head: () => ({

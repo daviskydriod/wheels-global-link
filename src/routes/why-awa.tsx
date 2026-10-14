@@ -1,9 +1,11 @@
+import { assetUrl } from "@/lib/asset-url";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2, Globe2, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageIntro, SectionHeading } from "@/components/marketplace";
 import { WhySection } from "@/components/home-page";
-import image from "@/assets/awa-cars-category.jpg";
+import imageAsset from "@/assets/awa-cars-category.jpg";
+const image = assetUrl(imageAsset);
 
 export const Route = createFileRoute("/why-awa")({
   head: () => ({

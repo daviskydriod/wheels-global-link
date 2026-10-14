@@ -1,4 +1,6 @@
-import image from "@/assets/awa-global.jpg";
+import { assetUrl } from "@/lib/asset-url";
+import imageAsset from "@/assets/awa-global.jpg";
+const image = assetUrl(imageAsset);
 import type { NewsArticle } from "@/components/news";
 
 export const localArticles: NewsArticle[] = [

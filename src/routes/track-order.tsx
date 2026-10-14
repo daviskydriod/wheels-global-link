@@ -1,3 +1,4 @@
+import { assetUrl } from "@/lib/asset-url";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { ArrowRight, CheckCircle2, Clock3, PackageCheck } from "lucide-react";
@@ -5,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageIntro, SectionHeading } from "@/components/marketplace";
 import { publicTrackOrder } from "@/lib/vehicle-platform";
-import image from "@/assets/awa-global.jpg";
+import imageAsset from "@/assets/awa-global.jpg";
+const image = assetUrl(imageAsset);
 
 type Order = { status?: string; order_number?: string };
 const stages = ["Processing", "Shipped", "Arrived"];

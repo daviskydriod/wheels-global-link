@@ -1,3 +1,4 @@
+import { assetUrl } from "@/lib/asset-url";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { useMemo } from "react";
@@ -5,7 +6,8 @@ import DOMPurify from "dompurify";
 import { PageIntro } from "@/components/marketplace";
 import { localArticles } from "@/lib/news";
 import { publicNews } from "@/lib/vehicle-platform";
-import image from "@/assets/awa-global.jpg";
+import imageAsset from "@/assets/awa-global.jpg";
+const image = assetUrl(imageAsset);
 
 export const Route = createFileRoute("/news/$slug")({
   loader: async ({ params }) => {

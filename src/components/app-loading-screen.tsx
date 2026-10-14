@@ -1,5 +1,7 @@
+import { assetUrl } from "@/lib/asset-url";
 import { useEffect, useState } from "react";
-import logo from "@/assets/awa-logo.png";
+import logoAsset from "@/assets/awa-logo.png";
+const logo = assetUrl(logoAsset);
 
 export function AppLoadingScreen() {
   const [visible, setVisible] = useState(true);
