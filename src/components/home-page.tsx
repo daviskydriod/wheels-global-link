@@ -115,35 +115,96 @@ export function HomePage({ catalog, articles }: { catalog: Vehicle[]; articles: 
 }
 
 function VideoShowcase() {
-  const videos = ["/videos/awa-showcase-1.mp4", "/videos/awa-showcase-2.mp4"];
+  const videos = [
+    {
+      src: "/videos/awa-showcase-1.mp4",
+      label: "Cars, cargo & delivery",
+      title: "From Vehicle Sourcing to the Final Mile",
+      duration: "About 20 seconds",
+      description:
+        "A fast-moving brand film that brings car imports and general cargo together in one global-delivery story. It moves from a premium SUV and a vehicle-filled warehouse to packed freight, air-cargo imagery and a playful animated delivery journey.",
+      highlights: [
+        "Vehicle sourcing and a car being prepared for container transport",
+        "Crated and palletised goods alongside automotive cargo",
+        "Air freight and animated global-route imagery",
+        "A doorstep hand-off and the closing message: “Trusted Service!”",
+      ],
+    },
+    {
+      src: "/videos/awa-showcase-2.mp4",
+      label: "Auto trading & logistics",
+      title: "Meet the People Behind the Logistics Story",
+      duration: "About 29 seconds",
+      description:
+        "A character-led introduction to AWA Logistics. Suit-wearing animal characters set a playful business tone before a bear presenter introduces auto trading and general machinery, then takes the story to a working-looking shipping port.",
+      highlights: [
+        "A family-sized luxury vehicle opens the film",
+        "An office presentation pairs a world map with auto-trading and machinery graphics",
+        "The final port scene features stacked shipping containers and a truck",
+        "AWA Logistics social handles appear during the closing pitch",
+      ],
+    },
+  ];
 
   return (
-    <motion.section {...reveal} className="section-pad bg-background">
+    <motion.section {...reveal} className="section-pad bg-secondary">
       <div className="container-shell">
         <SectionHeading
-          eyebrow="A closer look"
-          title="See AWA In Action"
-          copy="Explore the AWA AUTO MALL experience through our latest videos."
+          eyebrow="AWA Logistics · Promotional films"
+          title="From Vehicle Sourcing to Global Delivery"
+          copy="Watch the supplied AWA Logistics films: one follows cars and cargo through a global-shipping story, while the other introduces auto trading, machinery and port-side logistics."
         />
-        <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2 sm:gap-8">
-          {videos.map((src, index) => (
-            <div
-              key={src}
-              className="mx-auto w-full max-w-sm overflow-hidden rounded-lg bg-navy shadow-lg"
+        <div className="grid gap-8">
+          {videos.map((video, index) => (
+            <article
+              key={video.src}
+              className="grid overflow-hidden rounded-lg border border-border bg-background shadow-sm md:grid-cols-[minmax(220px,0.7fr)_1.3fr]"
             >
-              <video
-                className="aspect-[9/16] w-full bg-navy object-contain"
-                controls
-                playsInline
-                preload="metadata"
-                aria-label={`AWA AUTO MALL showcase video ${index + 1}`}
-              >
-                <source src={src} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </div>
+              <div className="mx-auto w-full max-w-xs bg-navy md:max-w-none">
+                <video
+                  className="aspect-[9/16] w-full bg-navy object-contain"
+                  controls
+                  playsInline
+                  preload="metadata"
+                  aria-label={`${video.title} — ${video.duration}`}
+                >
+                  <source src={video.src} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+              <div className="p-6 sm:p-8 lg:p-10">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">
+                  Film 0{index + 1} <span aria-hidden="true">·</span> {video.label}{" "}
+                  <span aria-hidden="true">·</span> {video.duration}
+                </p>
+                <h3 className="mt-3 text-3xl font-extrabold uppercase leading-tight sm:text-4xl">
+                  {video.title}
+                </h3>
+                <p className="mt-4 max-w-2xl leading-7 text-muted-foreground">
+                  {video.description}
+                </p>
+                <h4 className="mt-6 text-sm font-extrabold uppercase tracking-wide">
+                  What you’ll see
+                </h4>
+                <ul className="mt-3 grid gap-3 sm:grid-cols-2">
+                  {video.highlights.map((highlight) => (
+                    <li
+                      key={highlight}
+                      className="flex gap-3 text-sm leading-6 text-muted-foreground"
+                    >
+                      <span className="mt-2 h-2 w-2 shrink-0 bg-primary" aria-hidden="true" />
+                      <span>{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </article>
           ))}
         </div>
+        <p className="mt-6 text-xs leading-5 text-muted-foreground">
+          These are promotional brand films with animated and illustrative scenes, rather than
+          documentary footage of individual vehicles or shipments.
+        </p>
       </div>
     </motion.section>
   );
