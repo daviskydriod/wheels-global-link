@@ -38,6 +38,6 @@ export default defineConfig({
       autoStaticPathsDiscovery: true,
       failOnError: false,
     },
-    sitemap: { enabled: true, host: "https://awaautos.com", outputPath: "sitemap.xml" },
+    sitemap: { enabled: true, host: "https://www.awaautos.com", outputPath: "sitemap.xml" },
   },
 });
