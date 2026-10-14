@@ -1,20 +1,40 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import DOMPurify from "dompurify";
-import { NewsArticle } from "@/components/news";
 import { PageIntro } from "@/components/marketplace";
 import { localArticles } from "@/lib/news";
 import { publicNews } from "@/lib/vehicle-platform";
 import image from "@/assets/awa-global.jpg";
 
 export const Route = createFileRoute("/news/$slug")({
-  head: () => ({ meta: [{ title: "News Article | AWA AUTO MALL" }] }),
+  loader: async ({ params }) => {
+    try {
+      const data = await publicNews(params.slug);
+      return { article: Array.isArray(data) ? null : data };
+    } catch {
+      return { article: localArticles.find((item) => item.slug === params.slug) ?? null };
+    }
+  },
+  head: ({ loaderData }) => ({
+    meta: [
+      { title: loaderData?.article?.title ?? "News Article | AWA AUTO MALL" },
+      ...(loaderData?.article?.excerpt
+        ? [{ name: "description", content: loaderData.article.excerpt }]
+        : []),
+    ],
+  }),
   component: NewsDetailPage,
 });
 
 // True when the content contains real HTML tags (our SQL articles do)
 const looksLikeHtml = (value: string) => /<\/?[a-z][\s\S]*>/i.test(value);
+const stripHtml = (value: string) =>
+  value
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 // Tailwind-only typography (no @tailwindcss/typography plugin needed)
 const articleStyles = [
@@ -39,21 +59,13 @@ const articleStyles = [
 ].join(" ");
 
 function NewsDetailPage() {
-  const { slug } = Route.useParams();
+  const { article } = Route.useLoaderData();
   const navigate = useNavigate();
-  const [article, setArticle] = useState<NewsArticle | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(true);
-    publicNews(slug)
-      .then((data) => setArticle(Array.isArray(data) ? null : data))
-      .catch(() => setArticle(localArticles.find((item) => item.slug === slug) || null))
-      .finally(() => setLoading(false));
-  }, [slug]);
 
   const body = article?.content || article?.excerpt || "";
   const isHtml = looksLikeHtml(body);
+  const canRenderHtml = isHtml && typeof window !== "undefined";
+  const readableBody = isHtml ? stripHtml(body) : body;
 
   // Sanitize before rendering so database content can never inject scripts
   const safeHtml = useMemo(() => {
@@ -92,7 +104,7 @@ function NewsDetailPage() {
                 Back to news
               </Link>
 
-              {isHtml ? (
+              {canRenderHtml ? (
                 <div
                   className={articleStyles}
                   onClick={handleContentClick}
@@ -101,7 +113,7 @@ function NewsDetailPage() {
               ) : (
                 // Plain-text articles (e.g. localArticles) keep the old behaviour
                 <div className="whitespace-pre-wrap text-lg leading-8 text-muted-foreground">
-                  {body}
+                  {readableBody}
                 </div>
               )}
 
@@ -114,6 +126,7 @@ function NewsDetailPage() {
                 </p>
                 <Link
                   to="/request-vehicle"
+                  search={{ vehicle: "" }}
                   className="mt-6 inline-flex rounded-md bg-primary px-6 py-3 font-bold text-primary-foreground"
                 >
                   Request a Vehicle
@@ -125,12 +138,8 @@ function NewsDetailPage() {
       ) : (
         <section className="section-pad">
           <div className="container-shell py-20 text-center">
-            <h1 className="text-4xl font-extrabold uppercase">
-              {loading ? "Loading article..." : "Article unavailable"}
-            </h1>
-            <p className="mt-4 text-muted-foreground">
-              {loading ? "" : "This news article could not be found."}
-            </p>
+            <h1 className="text-4xl font-extrabold uppercase">Article unavailable</h1>
+            <p className="mt-4 text-muted-foreground">This news article could not be found.</p>
             <Link to="/news" className="mt-8 inline-flex font-bold text-primary">
               Back to news
             </Link>
