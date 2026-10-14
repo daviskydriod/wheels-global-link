@@ -84,6 +84,8 @@ export function PwaRuntime() {
               <img
                 src={logo}
                 alt="AWA AUTO MALL"
+                width={1080}
+                height={1080}
                 className="h-auto w-48 max-w-[72vw] object-contain"
               />
               <p className="mt-7 text-xs font-bold uppercase tracking-[.2em] text-primary">

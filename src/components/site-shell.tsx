@@ -35,6 +35,8 @@ export function SiteHeader() {
           <img
             src={logo}
             alt="AWA AUTO MALL"
+            width={1080}
+            height={1080}
             className="h-11 w-auto max-w-[155px] object-contain sm:h-14 sm:max-w-[190px]"
           />
         </Link>
@@ -121,7 +123,13 @@ export function SiteFooter() {
     <footer className="bg-surface-dark text-primary-foreground">
       <div className="container-shell grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <img src={logo} alt="AWA AUTO MALL" className="h-20 w-auto bg-transparent p-0" />
+          <img
+            src={logo}
+            alt="AWA AUTO MALL"
+            width={1080}
+            height={1080}
+            className="h-20 w-auto bg-transparent p-0"
+          />
           <p className="mt-5 max-w-sm text-sm text-primary-foreground/65">
             Cars sourced from Guangzhou, China for customers around the world.
           </p>

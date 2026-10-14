@@ -17,7 +17,13 @@ export function AppLoadingScreen() {
       role="status"
     >
       <div className="flex flex-col items-center">
-        <img src={logo} alt="AWA AUTO MALL" className="h-auto w-52 max-w-[72vw] object-contain" />
+        <img
+          src={logo}
+          alt="AWA AUTO MALL"
+          width={1080}
+          height={1080}
+          className="h-auto w-52 max-w-[72vw] object-contain"
+        />
         <div className="mt-8 flex items-center gap-2" aria-hidden="true">
           <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />
           <span className="h-2 w-2 animate-pulse rounded-full bg-primary [animation-delay:150ms]" />

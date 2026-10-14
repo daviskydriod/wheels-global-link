@@ -274,7 +274,13 @@ export function PageIntro({
 }) {
   return (
     <section className="relative min-h-[440px] overflow-hidden bg-navy">
-      <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-40" />
+      <img
+        src={image}
+        alt=""
+        width={1600}
+        height={1000}
+        className="absolute inset-0 h-full w-full object-cover opacity-40"
+      />
       <div className="absolute inset-0 bg-gradient-to-r from-surface-dark via-surface-dark/75 to-transparent" />
       <div className="container-shell relative flex min-h-[440px] items-end py-16">
         <div className="max-w-3xl">

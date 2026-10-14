@@ -16,10 +16,12 @@ export type NewsArticle = {
 export function NewsCard({ article }: { article: NewsArticle }) {
   return (
     <article className="group flex h-full flex-col overflow-hidden border border-border bg-card">
-      <Link to="/news/$slug" params={{ slug: article.slug }}>
+      <Link to="/news/$slug" params={{ slug: article.slug }} aria-label={`Read ${article.title}`}>
         <img
           src={article.cover_image || image}
           alt=""
+          width={1600}
+          height={1008}
           className="aspect-[16/9] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
         />
       </Link>
