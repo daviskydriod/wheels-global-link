@@ -8,7 +8,7 @@ import {
   ShieldCheck,
   Ship,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { getVehicleFallbackImage, vehicles } from "@/lib/inventory";
 import { formatMarketplacePrice, publicVehicleBySlug } from "@/lib/vehicle-platform";
@@ -82,11 +82,7 @@ function VehicleDetail() {
   const vehicle = Route.useLoaderData();
   const gallery = vehicle.images?.length ? vehicle.images : [vehicle.image];
   const [activeImage, setActiveImage] = useState(gallery[0]);
-  const [currency, setCurrency] = useState("USD");
-  useEffect(() => {
-    const storedCurrency = localStorage.getItem("awa-currency");
-    if (storedCurrency) setCurrency(storedCurrency);
-  }, []);
+  const currency = "USD";
   const specs = [
     ["Brand", vehicle.brand],
     ["Model", vehicle.model],

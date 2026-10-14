@@ -51,7 +51,7 @@ export function HomePage({ catalog, articles }: { catalog: Vehicle[]; articles: 
             copy="Explore vehicles by brand, model, or type. Inventory shown is representative and subject to confirmation."
           />
           {catalog.length ? (
-            <VehicleGrid items={catalog.slice(0, 3)} />
+            <VehicleGrid items={catalog.slice(0, 3)} currency="USD" />
           ) : (
             <p className="border border-dashed border-border bg-background p-6 text-muted-foreground">
               No published vehicles are available yet. Send us your requirements and we will source
@@ -188,7 +188,7 @@ function SearchSection({ items }: { items: Vehicle[] }) {
         {query && (
           <div className="mt-6">
             {shown.length ? (
-              <VehicleGrid items={shown} />
+              <VehicleGrid items={shown} currency="USD" />
             ) : (
               <p className="border border-border bg-background p-6 text-muted-foreground">
                 No matching vehicle in the current gallery. We can source it for you.
